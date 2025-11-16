@@ -2,6 +2,8 @@ package Lab7;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Instructor extends User 
 {
@@ -18,11 +20,14 @@ public class Instructor extends User
     public void addCourse(String courseId) { createdCourses.add(courseId); }
 
     @Override
-    public String toJson()
-    {
-        return String.format(
-            "{\"userId\":\"%s\",\"username\":\"%s\",\"email\":\"%s\",\"passwordHash\":\"%s\",\"role\":\"%s\",\"createdCourses\":%s}",
-            getUserId(), getUsername(), getEmail(), getPasswordHash(), getRole(), getCreatedCourses().toString()
-        );
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("userId", getUserId());
+        obj.put("username", getUsername());
+        obj.put("email", getEmail());
+        obj.put("passwordHash", getPasswordHash());
+        obj.put("role", getRole());
+        obj.put("createdCourses", new JSONArray(createdCourses));
+        return obj;
     }
 }
