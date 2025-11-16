@@ -2,6 +2,8 @@ package Lab7;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Lesson {
     private String lessonId;
@@ -39,9 +41,12 @@ public class Lesson {
     public String getContent() { return content; }
     public List<String> getResources() { return resources; }
 
-    @Override
-    public String toString() {
-        return String.format("{\"lessonId\":\"%s\",\"title\":\"%s\",\"content\":\"%s\",\"resources\":%s}", 
-                              lessonId, title, content, resources.toString());
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("lessonId", lessonId);
+        obj.put("title", title);
+        obj.put("content", content);
+        obj.put("resources", new JSONArray(resources));
+        return obj;
     }
 }
