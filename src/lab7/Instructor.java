@@ -8,9 +8,7 @@ import org.json.JSONObject;
 public class Instructor extends User 
 {
 
-    static Instructor fromJson(JSONObject obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   
     private List<String> createdCourses;
 
     public Instructor(String userId, String username, String email, String passwordHash)
