@@ -11,13 +11,16 @@ public class UserAccountManager {
     private List<User> users;       // store all users (Students + Instructors)
     private User currentUser;       // currently logged-in user
     private JsonDatabaseManager jsonDB;
-
+    private List<Student> students;
+    private List<Instructor> instructors;
 
     public UserAccountManager() {
         users = new ArrayList<>();
         currentUser = null;
         jsonDB = new JsonDatabaseManager();
         users = jsonDB.loadUsers(); // load existing users from users.json
+        students=  jsonDB.getStudents();
+        instructors= jsonDB.getInstructors();
     }
 
     // ===================== SIGNUP =====================

@@ -1,6 +1,7 @@
 
 import Lab7.JsonDatabaseManager;
-import Lab7.User;
+import Lab7.StudentManager;
+import Lab7.*;
 import Lab7.UserAccountManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,10 @@ public class signup extends javax.swing.JFrame {
     /**
      * Creates new form signup
      */
-    JsonDatabaseManager adm;
+    UserAccountManager adm;
     public signup() {
         initComponents();
+        this.adm = new UserAccountManager();
     }
 
     /**
@@ -48,7 +50,7 @@ public class signup extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         ID = new javax.swing.JTextPane();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextPane5 = new javax.swing.JTextPane();
+        email = new javax.swing.JTextPane();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
@@ -80,7 +82,7 @@ public class signup extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(ID);
 
-        jScrollPane5.setViewportView(jTextPane5);
+        jScrollPane5.setViewportView(email);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
         jLabel5.setText("re-enter password");
@@ -231,8 +233,12 @@ public class signup extends javax.swing.JFrame {
        }
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
-        UserAccountManager user = new UserAccountManager();
-        List<User> users = adm.loadUsers();
+         String student ="student";
+        if (jRadioButton2.isSelected()) {
+            student = "student";
+
+        StudentManager SM = new StudentManager();
+        List<Student> students = SM.getStudents();
          String id = ID.getText();
 
         int x = 0, f = 0;
@@ -244,7 +250,7 @@ public class signup extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error Invalid id");
             return;
         }
-        for ( User user1 : users){
+        for ( User user1 : students){
             if (user1.getUserId().equals(x)){
                  JOptionPane.showMessageDialog(this, "id already exists");
                  return;
@@ -265,8 +271,65 @@ public class signup extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "password dont match");
             return;
         }
-        
-        
+         String mail = email.getText();
+        if (email.equals("") || !SM.isValidEmail(mail)) {
+            JOptionPane.showMessageDialog(this, "email not valid");
+            return;
+        }
+        adm.signup(name2,mail,pass1,student);
+        } //////////////////////
+        ///
+        ///
+///
+         String instructor ="instructor";
+         if (jRadioButton1.isSelected()) {
+           instructor = "instructor";
+
+        InstructorManager IM = new InstructorManager();
+        List<Instructor> instructors = IM.getinstructor();
+         String id = ID.getText();
+
+        int l = 0, p = 0;
+        double o = 0;
+        try {
+
+            l = Integer.parseInt(id);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error Invalid id");
+            return;
+        }
+        for ( User user1 : instructors){
+            if (user1.getUserId().equals(l)){
+                 JOptionPane.showMessageDialog(this, "id already exists");
+                 return;
+            }
+        }
+        String name2 = name.getText();
+        if (name2.equals("") || isnumeric(name2)) {
+            JOptionPane.showMessageDialog(this, "Error enter a valid name");
+            return;
+        }
+        String pass1 = password1.getText();
+        if (pass1.equals("")) {
+            JOptionPane.showMessageDialog(this, "Error enter a valid password");
+            return;
+        }
+         String pass2 = password2.getText();
+        if (pass2.equals("") || !pass2.equals(pass1)) {
+            JOptionPane.showMessageDialog(this, "password dont match");
+            return;
+        }
+         String mail = email.getText();
+        if (email.equals("") || !IM.isValidEmail(mail)) {
+            JOptionPane.showMessageDialog(this, "email not valid");
+            return;
+        }
+        adm.signup(name2,mail,pass1,instructor);
+        }
+        NewJFrame h= new NewJFrame();
+        h.setVisible(true);
+        this.setVisible(false);
+         //signup(String username, String email, String password, String role)
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
@@ -306,6 +369,7 @@ public class signup extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane ID;
+    private javax.swing.JTextPane email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -321,7 +385,6 @@ public class signup extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextPane jTextPane5;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTextPane name;
     private javax.swing.JTextPane password1;

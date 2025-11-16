@@ -2,10 +2,12 @@ package Lab7;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class InstructorManager {
     private List<Course> courses; // all courses in the system
     private JsonDatabaseManager jsonDB; // handles courses.json
+    
 
     // ===================== Constructor =====================
     public InstructorManager() {
@@ -104,4 +106,13 @@ public class InstructorManager {
     public List<Course> getAllCourses() {
         return courses;
     }
+        public boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return Pattern.matches(emailRegex, email);
+    }
+        public List<Instructor> getinstructor()
+        {
+            return jsonDB.getInstructors();
+        }
+        
 }

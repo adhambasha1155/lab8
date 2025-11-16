@@ -30,4 +30,5 @@ public class Instructor extends User
         obj.put("createdCourses", new JSONArray(createdCourses));
         return obj;
     }
+    
 }
