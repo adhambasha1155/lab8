@@ -1,11 +1,8 @@
-[
-{
-    "role": "Student",
-    "enrolledCourses": [],
-    "progress": [],
+[{
+    "role": "Instructor",
+    "createdCourses": [],
     "userId": "U1",
-    "email": "aa@aa.com",
-    "passwordHash": "961b6dd3ede3cb8ecbaacbd68de040cd78eb2ed5889130cceb4c49268ea4d506",
-    "username": "aaa"
-}
-]
+    "email": "ad@ad.com",
+    "passwordHash": "93d0f83b8dee6fd208d0804c80d0819d1b2cb39d11ddd553291627943e4d0394",
+    "username": "adh"
+}]

@@ -2,9 +2,14 @@ package Lab7;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 public class Course
 {
+
+    static Course fromJson(JSONObject obj) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     private String courseId;
     private String title;
     private String description;

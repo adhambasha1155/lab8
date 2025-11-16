@@ -15,10 +15,10 @@ public class UserAccountManager {
     private List<Instructor> instructors;
 
     public UserAccountManager() {
-        users = new ArrayList<>();
         currentUser = null;
         jsonDB = new JsonDatabaseManager();
         users = jsonDB.loadUsers(); // load existing users from users.json
+        System.out.println(users.size());
         students=  jsonDB.getStudents();
         instructors= jsonDB.getInstructors();
     }
@@ -125,7 +125,7 @@ public class UserAccountManager {
         return Pattern.matches(emailRegex, email);
     }
 
-    private String hashPassword(String password) {
+    public String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(password.getBytes());

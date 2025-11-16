@@ -286,7 +286,7 @@ public class signup extends javax.swing.JFrame {
            instructor = "instructor";
 
         InstructorManager IM = new InstructorManager();
-        List<Instructor> instructors = IM.getinstructor();
+        
          String id = ID.getText();
 
         int l = 0, p = 0;
@@ -294,15 +294,18 @@ public class signup extends javax.swing.JFrame {
         try {
 
             l = Integer.parseInt(id);
-        } catch (Exception e) {
+        } catch (Exception e){
             JOptionPane.showMessageDialog(this, "Error Invalid id");
             return;
         }
-        for ( User user1 : instructors){
+        if(IM.getinstructor() !=null){
+        List<Instructor> instructors = IM.getinstructor();
+         for ( User user1 : instructors){
             if (user1.getUserId().equals(l)){
                  JOptionPane.showMessageDialog(this, "id already exists");
                  return;
             }
+        }
         }
         String name2 = name.getText();
         if (name2.equals("") || isnumeric(name2)) {
