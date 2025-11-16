@@ -32,7 +32,7 @@ public class Student extends User
         }
     }
     
-    // Get completed lessons for a specific course
+    // Get completed lessons for a specific courses
     public List<String> getCompletedLessons(String courseId)
     {
         List<String> lessons = new ArrayList<>();
