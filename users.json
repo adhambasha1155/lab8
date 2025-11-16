@@ -1,0 +1,18 @@
+[
+  {
+    "userId": "U1",
+    "username": "Alice",
+    "email": "alice@example.com",
+    "passwordHash": "a1b2c3...",
+    "role": "Student",
+    "enrolledCourses": ["C1","C2"]
+  },
+  {
+    "userId": "U2",
+    "username": "Bob",
+    "email": "bob@example.com",
+    "passwordHash": "d4e5f6...",
+    "role": "Instructor",
+    "createdCourses": ["C1"]
+  }
+]

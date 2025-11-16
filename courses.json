@@ -1,0 +1,13 @@
+[
+  {
+    "courseId": "C1",
+    "title": "Java Basics",
+    "description": "Learn Java from scratch",
+    "instructorId": "U2",
+    "lessons": [
+      {"lessonId": "L1", "title": "Intro", "content": "Welcome...", "resources": []},
+      {"lessonId": "L2", "title": "Variables", "content": "Data types...", "resources": []}
+    ],
+    "students": ["U1"]
+  }
+]
