@@ -9,9 +9,7 @@ import org.json.JSONObject;
 public class Student extends User
 {
 
-    static Student fromJson(JSONObject obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   
     private List<String> enrolledCourses;
     private List<String> progress; // store as "courseId:lessonId"
     
@@ -62,4 +60,25 @@ public class Student extends User
         obj.put("progress", new JSONArray(progress));
         return obj;
     }
+    public static Student fromJson(JSONObject obj) {
+
+    // Create the student using the base User fields
+    Student s = new Student(
+            obj.getString("userId"),
+            obj.getString("username"),
+            obj.getString("email"),
+            obj.getString("passwordHash")
+    );
+
+    // Load enrolled courses (array of strings)
+    JSONArray arr = obj.optJSONArray("enrolledCourses");
+    if (arr != null) {
+        for (int i = 0; i < arr.length(); i++) {
+            s.enrollCourse(arr.getString(i));
+        }
+    }
+
+    return s;
+}
+
 }

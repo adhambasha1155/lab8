@@ -2,6 +2,7 @@ package Lab7;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Course
@@ -82,4 +83,46 @@ public class Course
             courseId, title, description, instructorId, lessons.toString(), students.toString()
         );
     }
+    public static Course fromJson(JSONObject obj) {
+
+    // Create the base Course object
+    Course c = new Course(
+            obj.getString("courseId"),
+            obj.getString("title"),
+            obj.getString("description"),
+            obj.getString("instructorId")
+    );
+
+    // =======================
+    // Load lessons (JSONArray of objects)
+    // =======================
+    JSONArray lessonsArr = obj.optJSONArray("lessons");
+    if (lessonsArr != null) {
+        for (int i = 0; i < lessonsArr.length(); i++) {
+
+            JSONObject lobj = lessonsArr.getJSONObject(i);
+
+            Lesson l = new Lesson(
+                    lobj.getString("lessonId"),
+                    lobj.getString("title"),
+                    lobj.getString("content")
+            );
+
+            c.addLesson(l);
+        }
+    }
+
+    // =======================
+    // Load enrolled students (array of IDs)
+    // =======================
+    JSONArray studentsArr = obj.optJSONArray("students");
+    if (studentsArr != null) {
+        for (int i = 0; i < studentsArr.length(); i++) {
+            c.getStudents().add(studentsArr.getString(i));
+        }
+    }
+
+    return c;
+}
+
 }
