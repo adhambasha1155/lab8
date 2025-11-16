@@ -189,12 +189,12 @@ public class NewJFrame extends javax.swing.JFrame {
         if(u!=null){
             if(mail.equals(u.getEmail())&&hash.equals(u.getPasswordHash())){
            if(u.getRole().equals("Instructor")){
-               instructorManagement h = new instructorManagement();
+               instructorManagement h = new instructorManagement(u);
                h.setVisible(true);
                this.setVisible(false); 
                return;
            } else if(u.getRole().equals("Student")){
-               instructorManagement h = new instructorManagement();
+               studentdash h = new studentdash(u);
                h.setVisible(true);
                this.setVisible(false);
                return;

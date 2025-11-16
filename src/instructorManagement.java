@@ -1,3 +1,6 @@
+
+import Lab7.User;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -12,8 +15,10 @@ public class instructorManagement extends javax.swing.JFrame {
     /**
      * Creates new form instructorManagement
      */
-    public instructorManagement() {
+    private User ins;
+    public instructorManagement(User u) {
         initComponents();
+        this.ins = u; 
     }
 
     /**
