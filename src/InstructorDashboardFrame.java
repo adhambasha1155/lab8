@@ -12,6 +12,7 @@
 import Lab7.Course;
 import Lab7.Instructor;
 import Lab7.InstructorManager;
+import Lab7.StudentManager;
 import Lab7.UserAccountManager;
 import javax.swing.*;
 import java.awt.*;
@@ -22,11 +23,13 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
    private Instructor currentInstructor;
     private UserAccountManager accountManager;
     private InstructorManager instructorManager;
-    public InstructorDashboardFrame(Instructor instructor, UserAccountManager accountManager, InstructorManager instructorManager) {
+    private StudentManager studentManager;
+    public InstructorDashboardFrame(Instructor instructor, UserAccountManager accountManager, InstructorManager instructorManager,StudentManager studentManager ) {
         initComponents();
         this.currentInstructor = instructor;
         this.accountManager = accountManager;
         this.instructorManager = instructorManager;
+        this.studentManager = studentManager;
         
         setTitle("Instructor Dashboard - Welcome, " + currentInstructor.getUsername());
         setSize(500, 300);
@@ -150,7 +153,8 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         managecourses manageFrame = new managecourses(
             this.currentInstructor, 
             this.instructorManager,
-            this.accountManager
+            this.accountManager,
+            this.studentManager
         );
         
         
@@ -161,6 +165,18 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     private void viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewActionPerformed
         // TODO add your handling code here:
+        if (this.studentManager == null) {
+        JOptionPane.showMessageDialog(this, "System error: Student data manager is unavailable.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Create and display the new frame, passing all necessary data
+    EnrolledStudentsFrame studentsFrame = new EnrolledStudentsFrame(
+        this.currentInstructor, 
+        this.instructorManager, 
+        this.studentManager
+    );
+    studentsFrame.setVisible(true);
     }//GEN-LAST:event_viewActionPerformed
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed

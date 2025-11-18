@@ -3,12 +3,14 @@ import Lab7.User;
 import Lab7.UserAccountManager;
 import Lab7.Instructor; 
 import Lab7.InstructorManager; 
+import Lab7.StudentManager;
 import javax.swing.JOptionPane;
 
 public class LoginFrame extends javax.swing.JFrame {
     
     private UserAccountManager accountManager;
     private InstructorManager instructorManager;
+    private StudentManager studentManager;
 
 
     
@@ -16,6 +18,7 @@ public class LoginFrame extends javax.swing.JFrame {
         initComponents();
         accountManager = new UserAccountManager(); // load users from users.json
         instructorManager = new InstructorManager();
+        studentManager = new StudentManager();
     }
     
     public LoginFrame(UserAccountManager accountManager) {
@@ -190,7 +193,8 @@ public class LoginFrame extends javax.swing.JFrame {
         InstructorDashboardFrame dashboard = new InstructorDashboardFrame(
             instructor, 
             accountManager, 
-            instructorManager // Pass the initialized manager
+            instructorManager,
+            studentManager
         );
         dashboard.setVisible(true);
         

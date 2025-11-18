@@ -11,6 +11,7 @@ import Lab7.InstructorManager;
 import Lab7.Course; // Assuming Course class is in Lab7 package
 import Lab7.Instructor;
 import Lab7.Lesson;
+import Lab7.StudentManager;
 import Lab7.UserAccountManager; // Needed if you want to perform a full logout
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,12 +21,14 @@ public class managecourses extends javax.swing.JFrame {
     private Instructor currentInstructor;
     private InstructorManager instructorManager;
     private UserAccountManager accountManager;
+    private StudentManager studentManager;
   private DefaultTableModel tableModel;
-    public managecourses(Instructor instructor, InstructorManager manager, UserAccountManager accountManager) {
+    public managecourses(Instructor instructor, InstructorManager manager, UserAccountManager accountManager,StudentManager studentManager ) {
         initComponents();
         this.currentInstructor = instructor;
         this.instructorManager = manager;
         this.accountManager = accountManager;
+        this.studentManager = studentManager;
        this.setLocationRelativeTo(null);
         setTitle("Manage Courses - Welcome, " + currentInstructor.getUsername());
         loadCoursesTable();
@@ -328,7 +331,8 @@ public class managecourses extends javax.swing.JFrame {
         InstructorDashboardFrame dashboard = new InstructorDashboardFrame(
             this.currentInstructor,
             this.accountManager,
-            this.instructorManager
+            this.instructorManager,
+            this.studentManager
         );
         dashboard.setVisible(true);
     } catch (Exception e) {
