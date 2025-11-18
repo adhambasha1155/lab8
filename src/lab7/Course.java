@@ -4,13 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 public class Course
 {
-
-    static Course fromJson(JSONObject obj) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     private String courseId;
     private String title;
     private String description;
@@ -76,53 +71,20 @@ public class Course
 }
 
 
-    public String toJson()
-    {
-        return String.format(
-            "{\"courseId\":\"%s\",\"title\":\"%s\",\"description\":\"%s\",\"instructorId\":\"%s\",\"lessons\":%s,\"students\":%s}",
-            courseId, title, description, instructorId, lessons.toString(), students.toString()
-        );
-    }
-    public static Course fromJson(JSONObject obj) {
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("courseId", courseId);
+        obj.put("title", title);
+        obj.put("description", description);
+        obj.put("instructorId", instructorId);
 
-    // Create the base Course object
-    Course c = new Course(
-            obj.getString("courseId"),
-            obj.getString("title"),
-            obj.getString("description"),
-            obj.getString("instructorId")
-    );
-
-    // =======================
-    // Load lessons (JSONArray of objects)
-    // =======================
-    JSONArray lessonsArr = obj.optJSONArray("lessons");
-    if (lessonsArr != null) {
-        for (int i = 0; i < lessonsArr.length(); i++) {
-
-            JSONObject lobj = lessonsArr.getJSONObject(i);
-
-            Lesson l = new Lesson(
-                    lobj.getString("lessonId"),
-                    lobj.getString("title"),
-                    lobj.getString("content")
-            );
-
-            c.addLesson(l);
+        JSONArray lessonArray = new JSONArray();
+        for (Lesson lesson : lessons) {
+            lessonArray.put(lesson.toJson());
         }
+        obj.put("lessons", lessonArray);
+
+        obj.put("students", new JSONArray(students));
+        return obj;
     }
-
-    // =======================
-    // Load enrolled students (array of IDs)
-    // =======================
-    JSONArray studentsArr = obj.optJSONArray("students");
-    if (studentsArr != null) {
-        for (int i = 0; i < studentsArr.length(); i++) {
-            c.getStudents().add(studentsArr.getString(i));
-        }
-    }
-
-    return c;
-}
-
 }

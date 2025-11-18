@@ -1,25 +1,12 @@
 package Lab7;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class StudentManager {
 
     private List<Student> students;   // loaded from JSON
     private List<Course> courses;     // loaded from JSON
     private JsonDatabaseManager jsonDB;
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public JsonDatabaseManager getJsonDB() {
-        return jsonDB;
-    }
 
     // ===================== Constructor =====================
     public StudentManager() {
@@ -115,9 +102,5 @@ public class StudentManager {
             if (s.getUserId().equals(studentId)) return s;
         }
         return null;
-    }
-        public boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        return Pattern.matches(emailRegex, email);
     }
 }

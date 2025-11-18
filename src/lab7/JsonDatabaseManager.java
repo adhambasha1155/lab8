@@ -2,52 +2,80 @@ package Lab7;
 
 import java.io.*;
 import java.util.*;
-import org.json.*;
 
 public class JsonDatabaseManager {
 
     private final String USERS_FILE = "users.json";
     private final String COURSES_FILE = "courses.json";
 
-    private List<Student> students;
-    private List<Instructor> instructors;
-    private List<User> users;
-
-    public JsonDatabaseManager() {
-        students = new ArrayList<>();
-        instructors = new ArrayList<>();
-        users = new ArrayList<>();
-
-        loadUsers();
-    }
-
     // ===================== Load Users =====================
     public List<User> loadUsers() {
+        List<User> users = new ArrayList<>();
+
         try {
             File file = new File(USERS_FILE);
             if (!file.exists()) {
                 file.createNewFile();
-                writeFile(file, "[]");
-                return users;
+                FileWriter fw = new FileWriter(file);
+                fw.write("[]");
+                fw.close();
             }
 
-            String content = readFile(file);
-            if (content.isEmpty()) content = "[]";
+            // Read the file content
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            br.close();
 
-            JSONArray arr = new JSONArray(content);
+            String content = sb.toString().trim();
+            if (content.equals("[]") || content.isEmpty()) return users;
+
+            // Parse JSON
+            org.json.JSONArray arr = new org.json.JSONArray(content);
 
             for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-
+                org.json.JSONObject obj = arr.getJSONObject(i);
+                String userId = obj.getString("userId");
+                String username = obj.getString("username");
+                String email = obj.getString("email");
+                String passwordHash = obj.getString("passwordHash");
                 String role = obj.getString("role");
 
                 if (role.equalsIgnoreCase("Student")) {
-                    Student s = Student.fromJson(obj);
-                    students.add(s);
+                    Student s = new Student(userId, username, email, passwordHash);
+
+                    // Load enrolled courses
+                    org.json.JSONArray enrolledArr = obj.optJSONArray("enrolledCourses");
+                    if (enrolledArr != null) {
+                        for (int j = 0; j < enrolledArr.length(); j++) {
+                            s.enrollCourse(enrolledArr.getString(j));
+                        }
+                    }
+
+                    // Load progress
+                    org.json.JSONArray progressArr = obj.optJSONArray("progress");
+                    if (progressArr != null) {
+                        for (int j = 0; j < progressArr.length(); j++) {
+                            String entry = progressArr.getString(j);
+                            String[] parts = entry.split(":");
+                            if (parts.length == 2) s.markLessonCompleted(parts[0], parts[1]);
+                        }
+                    }
+
                     users.add(s);
+
                 } else if (role.equalsIgnoreCase("Instructor")) {
-                    Instructor ins = Instructor.fromJson(obj);
-                    instructors.add(ins);
+                    Instructor ins = new Instructor(userId, username, email, passwordHash);
+
+                    // Load created courses
+                    org.json.JSONArray createdArr = obj.optJSONArray("createdCourses");
+                    if (createdArr != null) {
+                        for (int j = 0; j < createdArr.length(); j++) {
+                            ins.addCourse(createdArr.getString(j));
+                        }
+                    }
+
                     users.add(ins);
                 }
             }
@@ -59,16 +87,25 @@ public class JsonDatabaseManager {
         return users;
     }
 
+
     // ===================== Save Users =====================
     public void saveUsers(List<User> users) {
-        JSONArray arr = new JSONArray();
+        try {
+            org.json.JSONArray arr = new org.json.JSONArray();
 
-        for (User u : users) {
-            arr.put(u.toJson());
+            for (User u : users) {
+                arr.put(u.toJson()); // toJson() now returns JSONObject
+            }
+
+            FileWriter fw = new FileWriter(USERS_FILE);
+            fw.write(arr.toString(2)); // pretty print with indentation
+            fw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        writeFile(new File(USERS_FILE), arr.toString(4));
     }
+
 
     // ===================== Load Courses =====================
     public List<Course> loadCourses() {
@@ -78,19 +115,66 @@ public class JsonDatabaseManager {
             File file = new File(COURSES_FILE);
             if (!file.exists()) {
                 file.createNewFile();
-                writeFile(file, "[]");
-                return courses;
+                FileWriter fw = new FileWriter(file);
+                fw.write("[]");
+                fw.close();
             }
 
-            String content = readFile(file);
-            if (content.isEmpty()) content = "[]";
+            // Read the file content
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            br.close();
 
-            JSONArray arr = new JSONArray(content);
+            String content = sb.toString().trim();
+            if (content.equals("[]") || content.isEmpty()) return courses;
+
+            // Parse JSON
+            org.json.JSONArray arr = new org.json.JSONArray(content);
 
             for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                Course c = Course.fromJson(obj);
-                courses.add(c);
+                org.json.JSONObject obj = arr.getJSONObject(i);
+
+                String courseId = obj.getString("courseId");
+                String title = obj.getString("title");
+                String description = obj.getString("description");
+                String instructorId = obj.getString("instructorId");
+
+                Course course = new Course(courseId, title, description, instructorId);
+
+                // Load lessons
+                org.json.JSONArray lessonsArr = obj.optJSONArray("lessons");
+                if (lessonsArr != null) {
+                    for (int j = 0; j < lessonsArr.length(); j++) {
+                        org.json.JSONObject lObj = lessonsArr.getJSONObject(j);
+                        String lessonId = lObj.getString("lessonId");
+                        String lessonTitle = lObj.getString("title");
+                        String lessonContent = lObj.getString("content");
+
+                        Lesson lesson = new Lesson(lessonId, lessonTitle, lessonContent);
+
+                        // Load resources
+                        org.json.JSONArray resArr = lObj.optJSONArray("resources");
+                        if (resArr != null) {
+                            for (int k = 0; k < resArr.length(); k++) {
+                                lesson.addResource(resArr.getString(k));
+                            }
+                        }
+
+                        course.addLesson(lesson);
+                    }
+                }
+
+                // Load students
+                org.json.JSONArray studentsArr = obj.optJSONArray("students");
+                if (studentsArr != null) {
+                    for (int j = 0; j < studentsArr.length(); j++) {
+                        course.enrollStudent(studentsArr.getString(j));
+                    }
+                }
+
+                courses.add(course);
             }
 
         } catch (Exception e) {
@@ -100,43 +184,23 @@ public class JsonDatabaseManager {
         return courses;
     }
 
+
     // ===================== Save Courses =====================
     public void saveCourses(List<Course> courses) {
-        JSONArray arr = new JSONArray();
+        try {
+            org.json.JSONArray arr = new org.json.JSONArray();
 
-        for (Course c : courses) {
-            arr.put(c.toJson());
-        }
+            for (Course course : courses) {
+                arr.put(course.toJson()); // toJson() now returns JSONObject
+            }
 
-        writeFile(new File(COURSES_FILE), arr.toString(4));
-    }
+            FileWriter fw = new FileWriter(COURSES_FILE);
+            fw.write(arr.toString(2)); // pretty print with indentation
+            fw.close();
 
-    // ===================== File Helpers =====================
-    private String readFile(File file) throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        StringBuilder sb = new StringBuilder();
-        String line;
-
-        while ((line = br.readLine()) != null)
-            sb.append(line);
-
-        br.close();
-        return sb.toString().trim();
-    }
-
-    private void writeFile(File file, String text) {
-        try (FileWriter fw = new FileWriter(file)) {
-            fw.write(text);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public List<Instructor> getInstructors() {
-        return instructors;
-    }
 }

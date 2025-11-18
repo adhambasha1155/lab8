@@ -11,16 +11,13 @@ public class UserAccountManager {
     private List<User> users;       // store all users (Students + Instructors)
     private User currentUser;       // currently logged-in user
     private JsonDatabaseManager jsonDB;
-    private List<Student> students;
-    private List<Instructor> instructors;
+
 
     public UserAccountManager() {
+        users = new ArrayList<>();
         currentUser = null;
         jsonDB = new JsonDatabaseManager();
         users = jsonDB.loadUsers(); // load existing users from users.json
-        System.out.println(users.size());
-        students=  jsonDB.getStudents();
-        instructors= jsonDB.getInstructors();
     }
 
     // ===================== SIGNUP =====================
@@ -95,6 +92,7 @@ public class UserAccountManager {
         if (!providedHash.equals(user.getPasswordHash())) {
             return null; // wrong password
         }
+        
 
         // 5. Login successful → set currentUser and return
         currentUser = user;
@@ -120,12 +118,12 @@ public class UserAccountManager {
     }
 
     // ===================== HELPER METHODS =====================
-    private boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return Pattern.matches(emailRegex, email);
     }
 
-    public String hashPassword(String password) {
+    private String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(password.getBytes());
@@ -139,6 +137,42 @@ public class UserAccountManager {
             return null;
         }
     }
+ // ===================== COURSE MANAGEMENT =====================
+
+    
+    public List<Course> getAllCourses() {
+        return jsonDB.loadCourses();  // always load latest data from courses.json
+    }
+    
+    public Course getCourseById(String courseId) {
+        List<Course> courses = jsonDB.loadCourses();
+        for (Course c : courses) {
+            if (c.getCourseId().equalsIgnoreCase(courseId)) {
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    public List<User> getAllUsers() {
+        return users; // users list already loaded in memory
+    }
+    
+    public void saveAllUsers() {
+        jsonDB.saveUsers(users);
+    }
+    
+    public void saveAllCourses() {
+        List<Course> courses = jsonDB.loadCourses(); 
+        jsonDB.saveCourses(courses);
+    }
+    
+    public void saveAllCourses(List<Course> courses) {
+        jsonDB.saveCourses(courses);
+    }
+
+   
+    //----------------------------------------------------------
 
     private User getUserByEmail(String email) {
         for (User user : users) {
@@ -148,9 +182,62 @@ public class UserAccountManager {
         }
         return null;
     }
+    
+    public User loginByUsername(String username, String password) {
 
-    public String getText() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // 1. Validate required fields
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            return null;
+        }
+
+        // 2. Check if user exists by username
+        User user = getUserByUsername(username); // you need to implement this
+        if (user == null) {
+            return null; // username not found
+        }
+
+        // 3. Hash the provided password and compare
+        String providedHash = hashPassword(password);
+        if (!providedHash.equals(user.getPasswordHash())) {
+            return null; // wrong password
+        }
+
+        // 4. Login successful → set currentUser and return
+        currentUser = user;
+        return user;
     }
+    
+    private User getUserByUsername(String username) {
+        for (User user : users) { // assuming you have a users list
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+    public void saveUser(User user) {
+    // 1. Find the index of the user in the in-memory list using their unique ID
+    int index = -1;
+    for (int i = 0; i < users.size(); i++) {
+        if (users.get(i).getUserId().equals(user.getUserId())) {
+            index = i;
+            break;
+        }
+    }
+
+    // 2. If found, replace the old object with the updated one
+    if (index != -1) {
+        users.set(index, user);
+    } else {
+        // This case should ideally not happen for a logged-in user
+        System.err.println("User not found in UserAccountManager list for saving: " + user.getUserId());
+        return; 
+    }
+
+    // 3. Save the entire updated list to users.json
+    jsonDB.saveUsers(users);
+}
+
+
 
 }
