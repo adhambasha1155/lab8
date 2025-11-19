@@ -60,14 +60,22 @@
   {
     "description": "electronics course",
     "students": [],
-    "title": "elec 2",
+    "title": "electronics",
     "courseId": "978",
     "instructorId": "U3",
-    "lessons": [{
-      "lessonId": "L1",
-      "resources": [],
-      "title": "elec intro",
-      "content": "dfg"
-    }]
+    "lessons": [
+      {
+        "lessonId": "L1",
+        "resources": [],
+        "title": "elec intro",
+        "content": "dfg"
+      },
+      {
+        "lessonId": "dfghj",
+        "resources": [],
+        "title": "ty",
+        "content": "for"
+      }
+    ]
   }
 ]
