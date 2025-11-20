@@ -1,7 +1,8 @@
-
+import javax.swing.*;
 import Lab7.Course;
 import Lab7.InstructorManager;
 import Lab7.Lesson;
+import Lab7.UserAccountManager;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -20,13 +21,19 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     private Course course;
     private InstructorManager instructorManager;
     private DefaultTableModel tableModel;
-    public ManageLessonsFrame(Course course, InstructorManager manager) {
-        initComponents();
+    private managecourses parentFrame;
+    private UserAccountManager accountManager;
+    public ManageLessonsFrame(Course course, InstructorManager manager, managecourses parent, UserAccountManager accountManager) {
         this.course = course;
         this.instructorManager = manager;
+        this.parentFrame = parent; // Store parent reference
+        this.accountManager = accountManager; // Store manager reference
+        
+        initComponents();
         this.setLocationRelativeTo(null);
         setTitle("Manage Lessons for: " + course.getTitle() + " (" + course.getCourseId() + ")");
         loadLessonsTable();
+        
     }
     public void loadLessonsTable() {
         // Use the existing model and clear rows to preserve column names
@@ -65,19 +72,20 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         lessonsTable = new javax.swing.JTable();
         addlesson = new javax.swing.JToggleButton();
         deletelesson = new javax.swing.JToggleButton();
-        completed = new javax.swing.JToggleButton();
+        back = new javax.swing.JToggleButton();
+        logout = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lessonsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "lessonID", "Title", "Content", "Completed"
+                "LessonId", "Title", "Content"
             }
         ));
         jScrollPane1.setViewportView(lessonsTable);
@@ -96,23 +104,34 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
             }
         });
 
-        completed.setText("mark as completed");
+        back.setText("back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
+        logout.setText("logout");
+        logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(completed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deletelesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addlesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(addlesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deletelesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,12 +141,14 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
+                        .addGap(53, 53, 53)
                         .addComponent(addlesson)
-                        .addGap(35, 35, 35)
+                        .addGap(18, 18, 18)
                         .addComponent(deletelesson)
-                        .addGap(35, 35, 35)
-                        .addComponent(completed, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(57, 57, 57)
+                        .addComponent(back)
+                        .addGap(18, 18, 18)
+                        .addComponent(logout)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -135,7 +156,7 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addlessonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addlessonActionPerformed
-
+        // TODO add your handling code here:
         String lessonId = JOptionPane.showInputDialog(this, "Enter new Lesson ID (e.g., L1, L2):", "Add Lesson", JOptionPane.QUESTION_MESSAGE);
         if (lessonId == null || lessonId.trim().isEmpty()) return;
         lessonId = lessonId.trim();
@@ -212,19 +233,51 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Failed to delete lesson.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
     }//GEN-LAST:event_deletelessonActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backActionPerformed
+
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
+        // TODO add your handling code here:
+        if (accountManager != null) {
+            
+            // 1. Perform the backend logout
+            accountManager.logout();
+            JOptionPane.showMessageDialog(this, "You have been successfully logged out.", "Logout Successful", JOptionPane.INFORMATION_MESSAGE);
+            
+            // 2. Close this frame
+            this.dispose(); 
+            
+            // 3. Close the parent frame (managecourses)
+            if (parentFrame != null) {
+                parentFrame.dispose(); 
+            }
+            
+            // 4. Open the LoginFrame
+            try {
+                // Ensure LoginFrame is accessible and accepts UserAccountManager
+                LoginFrame loginFrame = new LoginFrame(accountManager); 
+                loginFrame.setVisible(true);
+            } catch (Exception e) {
+                System.err.println("Could not reopen LoginFrame: " + e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_logoutActionPerformed
 
     /**
      * @param args the command line arguments
      */
-  
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton addlesson;
-    private javax.swing.JToggleButton completed;
+    private javax.swing.JToggleButton back;
     private javax.swing.JToggleButton deletelesson;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable lessonsTable;
+    private javax.swing.JToggleButton logout;
     // End of variables declaration//GEN-END:variables
 }
