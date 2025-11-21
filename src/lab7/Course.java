@@ -12,6 +12,7 @@ public class Course
     private String instructorId;
     private List<Lesson> lessons;
     private List<String> students; // List of enrolled student IDs
+    private ApprovalStatus status;
 
     public Course(String courseId, String title, String description, String instructorId)
     {
@@ -21,6 +22,7 @@ public class Course
         this.instructorId = instructorId;
         this.lessons = new ArrayList<>();
         this.students = new ArrayList<>();
+        this.status = ApprovalStatus.PENDING;
     }
 
     public void setCourseId(String courseId) {
@@ -54,6 +56,8 @@ public class Course
     public String getInstructorId() { return instructorId; }
     public List<Lesson> getLessons() { return lessons; }
     public List<String> getStudents() { return students; }
+    public ApprovalStatus getStatus() { return status; }
+    public void setStatus(ApprovalStatus status) { this.status = status;}
 
     public void addLesson(Lesson lesson) { lessons.add(lesson); }
     public void enrollStudent(String studentId) { students.add(studentId); }
@@ -77,7 +81,7 @@ public class Course
         obj.put("title", title);
         obj.put("description", description);
         obj.put("instructorId", instructorId);
-
+        obj.put("status", status.name());
         JSONArray lessonArray = new JSONArray();
         for (Lesson lesson : lessons) {
             lessonArray.put(lesson.toJson());
