@@ -3,6 +3,7 @@ import Lab7.User;
 import Lab7.UserAccountManager;
 import Lab7.Instructor; 
 import Lab7.InstructorManager; 
+import Lab7.Student;
 import Lab7.StudentManager;
 import javax.swing.JOptionPane;
 
@@ -204,13 +205,9 @@ public class LoginFrame extends javax.swing.JFrame {
     } else if ("Student".equals(user.getRole())) {
         // TODO: Implement Student Dashboard opening here
         
-        JOptionPane.showMessageDialog(this,
-            "Student Dashboard not yet implemented.",
-            "Information",
-            JOptionPane.INFORMATION_MESSAGE
-        );
-        // this.dispose();
-        // new StudentDashboardFrame((Student) user, accountManager, new StudentManager()).setVisible(true);
+      
+         this.dispose();
+        new StudentDashboardFrame(accountManager, (Student) user).setVisible(true);
     }
 
     }//GEN-LAST:event_loginButtonActionPerformed
