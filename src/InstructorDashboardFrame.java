@@ -174,7 +174,8 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
     EnrolledStudentsFrame studentsFrame = new EnrolledStudentsFrame(
         this.currentInstructor, 
         this.instructorManager, 
-        this.studentManager
+        this.studentManager,
+        this.accountManager
     );
     studentsFrame.setVisible(true);
     }//GEN-LAST:event_viewActionPerformed
