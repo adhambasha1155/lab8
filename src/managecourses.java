@@ -91,8 +91,7 @@ public class managecourses extends javax.swing.JFrame {
         logout = new javax.swing.JToggleButton();
         delete = new javax.swing.JToggleButton();
         back = new javax.swing.JToggleButton();
-        addlesson = new javax.swing.JToggleButton();
-        deletelessons = new javax.swing.JToggleButton();
+        managelessons = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,17 +143,10 @@ public class managecourses extends javax.swing.JFrame {
             }
         });
 
-        addlesson.setText("add lesson");
-        addlesson.addActionListener(new java.awt.event.ActionListener() {
+        managelessons.setText("manage lessons");
+        managelessons.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addlessonActionPerformed(evt);
-            }
-        });
-
-        deletelessons.setText("delete lessons");
-        deletelessons.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deletelessonsActionPerformed(evt);
+                managelessonsActionPerformed(evt);
             }
         });
 
@@ -164,24 +156,15 @@ public class managecourses extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deletelessons, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addlesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(create, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(12, 12, 12))))
+                    .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managelessons))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,16 +172,14 @@ public class managecourses extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(36, 36, 36)
                 .addComponent(create)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(edit)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(delete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addlesson)
-                .addGap(18, 18, 18)
-                .addComponent(deletelessons)
+                .addComponent(managelessons)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(logout)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -348,11 +329,11 @@ public class managecourses extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_backActionPerformed
 
-    private void addlessonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addlessonActionPerformed
+    private void managelessonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managelessonsActionPerformed
         // TODO add your handling code here:
         int selectedRow = jtable1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a course to add a lesson to.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a course to manage lessons.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -361,92 +342,18 @@ public class managecourses extends javax.swing.JFrame {
         Course courseToEdit = instructorManager.getCourseById(courseId);
 
         if (courseToEdit != null) {
-            
-            // 2. Prompt for Lesson ID
-            String lessonId = JOptionPane.showInputDialog(this, "Enter new Lesson ID (e.g., L1, L2):", "Add Lesson", JOptionPane.QUESTION_MESSAGE);
-            if (lessonId == null || lessonId.trim().isEmpty()) return;
-            
-            // Validation: Check for Lesson ID uniqueness within the course
-            if (courseToEdit.getLessonById(lessonId.trim()) != null) {
-                JOptionPane.showMessageDialog(this, "A lesson with ID '" + lessonId.trim() + "' already exists in course '" + courseToEdit.getTitle() + "'.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // 3. Prompt for Title
-            String title = JOptionPane.showInputDialog(this, "Enter Lesson Title:", "Add Lesson", JOptionPane.QUESTION_MESSAGE);
-            if (title == null || title.trim().isEmpty()) return;
-
-            // 4. Prompt for Content
-            // Using a JTextArea in a JOptionPane can improve usability for content, but for simplicity, we use the standard input dialog
-            String content = JOptionPane.showInputDialog(this, "Enter Lesson Content:", "Add Lesson", JOptionPane.QUESTION_MESSAGE);
-            if (content == null || content.trim().isEmpty()) return;
-            
-            // 5. Call Manager to create and save the lesson
-            // This assumes your InstructorManager has the method: public Lesson createLesson(Course course, String lessonId, String title, String content)
-            Lesson newLesson = instructorManager.createLesson(
+            // 2. Open the new ManageLessonsFrame
+            ManageLessonsFrame manageLessonsFrame = new ManageLessonsFrame(
                 courseToEdit, 
-                lessonId.trim(), 
-                title.trim(), 
-                content.trim()
+                this.instructorManager,
+                this, 
+                this.accountManager 
             );
-
-            if (newLesson != null) {
-                JOptionPane.showMessageDialog(this, "Lesson '" + title.trim() + "' added successfully to course " + courseToEdit.getTitle() + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadCoursesTable(); // Refresh the table to show updated lesson count
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to add lesson.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            manageLessonsFrame.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: Could not retrieve course details.", "System Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_addlessonActionPerformed
-
-    private void deletelessonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletelessonsActionPerformed
-        // TODO add your handling code here:
-        int selectedRow = jtable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a course to delete a lesson from.", "Selection Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // 1. Get the selected Course
-        String courseId = (String) jtable1.getModel().getValueAt(selectedRow, 0);
-        Course courseToEdit = instructorManager.getCourseById(courseId);
-        String courseTitle = courseToEdit.getTitle();
-
-        if (courseToEdit != null) {
-            
-            // 2. Prompt for Lesson ID
-            String lessonId = JOptionPane.showInputDialog(this, "Enter the ID of the lesson to delete:", "Delete Lesson", JOptionPane.QUESTION_MESSAGE);
-            if (lessonId == null || lessonId.trim().isEmpty()) return;
-            
-            // 3. Retrieve the Lesson object
-            Lesson lessonToDelete = courseToEdit.getLessonById(lessonId.trim());
-
-            if (lessonToDelete == null) {
-                JOptionPane.showMessageDialog(this, "Lesson with ID '" + lessonId.trim() + "' was not found in course '" + courseTitle + "'.", "Lesson Not Found", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            // 4. Confirmation Dialog
-            int response = JOptionPane.showConfirmDialog(this, 
-                "Are you sure you want to delete lesson: " + lessonToDelete.getTitle() + " (" + lessonId.trim() + ") from course " + courseTitle + "?\nThis is a permanent action.", 
-                "Confirm Lesson Deletion", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.WARNING_MESSAGE);
-
-            if (response == JOptionPane.YES_OPTION) {
-                
-                // 5. Call Manager to delete and save
-                boolean success = instructorManager.deleteLesson(courseToEdit, lessonToDelete);
-                
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Lesson '" + lessonToDelete.getTitle() + "' deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    loadCoursesTable(); // Refresh the table to show updated lesson count
-                } else {
-                    JOptionPane.showMessageDialog(this, "Failed to delete lesson.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-    }//GEN-LAST:event_deletelessonsActionPerformed
+    }//GEN-LAST:event_managelessonsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -454,14 +361,13 @@ public class managecourses extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton addlesson;
     private javax.swing.JToggleButton back;
     private javax.swing.JToggleButton create;
     private javax.swing.JToggleButton delete;
-    private javax.swing.JToggleButton deletelessons;
     private javax.swing.JToggleButton edit;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtable1;
     private javax.swing.JToggleButton logout;
+    private javax.swing.JToggleButton managelessons;
     // End of variables declaration//GEN-END:variables
 }
