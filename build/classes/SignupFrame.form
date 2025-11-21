@@ -140,7 +140,7 @@
           <StringArray count="3">
             <StringItem index="0" value="Student"/>
             <StringItem index="1" value="Instructor"/>
-            <StringItem index="2" value=" "/>
+            <StringItem index="2" value="Admin"/>
           </StringArray>
         </Property>
       </Properties>

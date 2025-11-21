@@ -1,4 +1,6 @@
 
+import Lab7.Admin;
+import Lab7.AdminManager;
 import Lab7.User;
 import Lab7.UserAccountManager;
 import Lab7.Instructor; 
@@ -12,6 +14,8 @@ public class LoginFrame extends javax.swing.JFrame {
     private UserAccountManager accountManager;
     private InstructorManager instructorManager;
     private StudentManager studentManager;
+    private AdminManager adminManager;
+    
 
 
     
@@ -20,12 +24,14 @@ public class LoginFrame extends javax.swing.JFrame {
         accountManager = new UserAccountManager(); // load users from users.json
         instructorManager = new InstructorManager();
         studentManager = new StudentManager();
+        adminManager = new AdminManager();
     }
     
     public LoginFrame(UserAccountManager accountManager) {
         initComponents();
         this.accountManager = accountManager;
         instructorManager = new InstructorManager();
+        adminManager = new AdminManager();
     }
 
     
@@ -204,10 +210,25 @@ public class LoginFrame extends javax.swing.JFrame {
         
     } else if ("Student".equals(user.getRole())) {
         // TODO: Implement Student Dashboard opening here
-        
-      
          this.dispose();
         new StudentDashboardFrame(accountManager, (Student) user).setVisible(true);
+    }else if ("Admin".equals(user.getRole())) { // ADD THIS BLOCK
+        
+        Admin admin = (Admin) user;
+        
+        // Open the Admin Dashboard
+        // Assuming you have an AdminDashboardFrame class that takes necessary managers
+        AdminDashboardFrame dashboard = new AdminDashboardFrame(
+            admin,
+            accountManager,
+            adminManager,
+            instructorManager,
+            studentManager
+        );
+        dashboard.setVisible(true);
+        
+        // Close the current Login Frame
+        this.dispose();
     }
 
     }//GEN-LAST:event_loginButtonActionPerformed
