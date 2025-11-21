@@ -33,5 +33,12 @@
     "email": "ss@ss",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
     "username": "student1"
+  },
+  {
+    "role": "Admin",
+    "userId": "U5",
+    "email": "ad@ad",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "admin1"
   }
 ]

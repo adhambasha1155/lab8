@@ -34,10 +34,9 @@ public class managecourses extends javax.swing.JFrame {
         loadCoursesTable();
         
     }
-    public void loadCoursesTable() {
-        // We define 5 relevant columns, overriding the generic titles from initComponents
-        String[] columnNames = {"ID", "Title", "Description", "Lessons", "Students"};
-        
+   public void loadCoursesTable() {
+        String[] columnNames = {"ID", "Title", "Description", "Lessons", "Students", "Status"};
+             
         tableModel = new DefaultTableModel(columnNames, 0) {
             // Override to make cells non-editable
             @Override
@@ -57,14 +56,16 @@ public class managecourses extends javax.swing.JFrame {
                 // Truncate description for a cleaner table view
                 String desc = course.getDescription();
                 String truncatedDesc = desc.length() > 60 ? desc.substring(0, 57) + "..." : desc;
+                String statusString = course.getStatus().name();
                 
-                // Prepare the row data
+                // 3. Prepare the row data (now 6 elements)
                 Object[] rowData = new Object[] {
                     course.getCourseId(),
                     course.getTitle(),
                     truncatedDesc,
                     course.getLessons().size(), 
-                    course.getStudents().size() 
+                    course.getStudents().size(), 
+                    statusString 
                 };
                 
                 tableModel.addRow(rowData);
@@ -74,7 +75,6 @@ public class managecourses extends javax.swing.JFrame {
         // Apply the prepared model to the JTable
         jtable1.setModel(tableModel);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -97,13 +97,13 @@ public class managecourses extends javax.swing.JFrame {
 
         jtable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "courseId", "Title", "description", "lessons", "Students"
+                "courseId", "Title", "description", "lessons", "Students", "status"
             }
         ));
         jScrollPane1.setViewportView(jtable1);
@@ -155,16 +155,16 @@ public class managecourses extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(create, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(managelessons))
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(create, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managelessons, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(back, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,17 +174,17 @@ public class managecourses extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(create)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(edit)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(delete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(managelessons)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(logout)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(back)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
