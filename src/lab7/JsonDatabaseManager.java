@@ -77,7 +77,11 @@ public class JsonDatabaseManager {
                     }
 
                     users.add(ins);
-                }
+                } else if (role.equals("Admin")) { // <--- NEW ADMIN LOADING
+                     Admin admin = new Admin(userId, username, email, passwordHash);
+                     users.add(admin);
+        
+                 }
             }
 
         } catch (Exception e) {
@@ -142,6 +146,13 @@ public class JsonDatabaseManager {
                 String instructorId = obj.getString("instructorId");
 
                 Course course = new Course(courseId, title, description, instructorId);
+                String statusString = obj.optString("status", ApprovalStatus.PENDING.name()); 
+                try {
+                    course.setStatus(ApprovalStatus.valueOf(statusString)); 
+                } catch (IllegalArgumentException e) {
+                    // Safety net: If status in JSON is corrupted, default to PENDING.
+                    course.setStatus(ApprovalStatus.PENDING);
+                }
 
                 // Load lessons
                 org.json.JSONArray lessonsArr = obj.optJSONArray("lessons");

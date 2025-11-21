@@ -52,6 +52,8 @@ public class UserAccountManager {
             newUser = new Student(userId, username, email, passwordHash);
         } else if (role.equalsIgnoreCase("Instructor")) {
             newUser = new Instructor(userId, username, email, passwordHash);
+        } else if (role.equalsIgnoreCase("Admin")) { 
+        newUser = new Admin(userId, username, email, passwordHash);
         } else {
             return null; // invalid role
         }
@@ -238,6 +240,13 @@ public class UserAccountManager {
     jsonDB.saveUsers(users);
 }
 
-
+    public User getUserById(String userId) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
+    }
 
 }
