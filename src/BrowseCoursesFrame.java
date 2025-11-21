@@ -6,12 +6,10 @@ import Lab7.User;
 import Lab7.UserAccountManager;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
 
 public class BrowseCoursesFrame extends javax.swing.JFrame {
-    
+
     private User currentUser;
     private DefaultTableModel model;
     private UserAccountManager accountManager;
@@ -35,28 +33,42 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
         loadCourses(); // load courses from UserAccountManager
     }
     
+    
+    
+    // ---------------------------
+    // LOAD COURSES INTO TABLE
     private void loadCourses() {
         model.setRowCount(0); // clear table
 
-        List<Course> courses = accountManager.getAllCourses(); // you need a method to get all courses
+        List<Course> courses = accountManager.getAllCourses();
+        if (courses == null) return;
 
         for (Course c : courses) {
             String instructorName = getInstructorName(c.getInstructorId());
-            model.addRow(new Object[]{c.getCourseId(), c.getTitle(), c.getDescription(), instructorName});
+
+            model.addRow(new Object[]{
+                c.getCourseId(),
+                c.getTitle(),
+                c.getDescription(),
+                instructorName
+            });
         }
     }
+
     
-    // Helper to get instructor name
+    // GET INSTRUCTOR NAME BY ID
     private String getInstructorName(String instructorId) {
-        for (User u : accountManager.getAllUsers()) { // get all users from UserAccountManager
+        for (User u : accountManager.getAllUsers()) {
             if (u instanceof Instructor && u.getUserId().equals(instructorId)) {
                 return u.getUsername();
             }
         }
         return "Unknown";
     }
-
+// -----------------------------------------------------------
     
+    
+    // Auto-generated GUI code
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -141,40 +153,63 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        // TODO add your handling code here:
+        // 1. Create the Student Dashboard screen again
+        StudentDashboardFrame dashboard = new StudentDashboardFrame(accountManager, currentUser);
+        
+        // 2. Make it visible
+        dashboard.setVisible(true);
+        
+        // 3. Close the current "Browse Courses" window
+        this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void enrollButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrollButtonActionPerformed
+        // 1. Get Selected Row
         int row = CourseTable.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Please select a course first.");
             return;
         }
 
+        // 2. Get Course ID from Column 0
         String courseId = (String) model.getValueAt(row, 0);
 
-        Course selectedCourse = accountManager.getCourseById(courseId);
-
-        if (selectedCourse != null) {
-
-            // Add student to course
-            selectedCourse.enrollStudent(currentUser.getUserId());
-
-            // Add course to student
-            ((Student) currentUser).enrollCourse(courseId);
-
-            // Save all files
-            accountManager.saveAllUsers();
-            accountManager.saveAllCourses();
-
-            JOptionPane.showMessageDialog(this, "Enrolled successfully!");
+        // 3. CHECK FOR DUPLICATES (The Fix)
+        if (currentUser instanceof Student) {
+            Student student = (Student) currentUser;
+            
+            // Check if the list of enrolled courses already contains this ID
+            if (student.getEnrolledCourses().contains(courseId)) {
+                JOptionPane.showMessageDialog(this, 
+                    "You are already enrolled in this course!", 
+                    "Duplicate Enrollment", 
+                    JOptionPane.WARNING_MESSAGE);
+                return; // Stop here, do not save
+            }
         }
+
+        // 4. Proceed if not duplicate
+        Course course = accountManager.getCourseById(courseId);
+        if (course == null) {
+            JOptionPane.showMessageDialog(this, "Course not found!");
+            return;
+        }
+
+        // Add student to course list
+        course.enrollStudent(currentUser.getUserId());
+
+        // Add course to student's enrolled list
+        ((Student) currentUser).enrollCourse(courseId);
+
+        // Save both JSON files
+        accountManager.saveAllUsers();
+        accountManager.saveAllCourses();
+
+        JOptionPane.showMessageDialog(this, "Enrolled successfully!");
     }//GEN-LAST:event_enrollButtonActionPerformed
 
        
-    
-    }
-    
+      
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -31,7 +31,11 @@ public class Student extends User
             progress.add(entry);
         }
     }
-    
+        public boolean isLessonCompleted(String courseId, String lessonId)
+    {
+        String entry = courseId + ":" + lessonId;
+        return progress.contains(entry);
+    }
     // Get completed lessons for a specific courses
     public List<String> getCompletedLessons(String courseId)
     {
