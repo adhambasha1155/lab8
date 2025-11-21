@@ -25,31 +25,16 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jScrollPane1" min="-2" pref="375" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="logout" min="-2" pref="118" max="-2" attributes="0"/>
-                          <Component id="back" min="-2" pref="118" max="-2" attributes="0"/>
-                          <Component id="deletelessons" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace type="unrelated" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="addlesson" min="-2" pref="118" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                  <Component id="create" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
-                                  <Component id="edit" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="delete" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="logout" min="-2" pref="118" max="-2" attributes="0"/>
+                  <Component id="back" min="-2" pref="118" max="-2" attributes="0"/>
+                  <Component id="delete" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
+                  <Component id="edit" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
+                  <Component id="create" min="-2" pref="118" max="-2" attributes="0"/>
+                  <Component id="managelessons" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -60,16 +45,14 @@
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               <Component id="create" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="edit" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="delete" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="addlesson" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="deletelessons" min="-2" max="-2" attributes="0"/>
+              <Component id="managelessons" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="logout" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -174,20 +157,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="addlesson">
+    <Component class="javax.swing.JToggleButton" name="managelessons">
       <Properties>
-        <Property name="text" type="java.lang.String" value="add lesson"/>
+        <Property name="text" type="java.lang.String" value="manage lessons"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addlessonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="deletelessons">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="delete lessons"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deletelessonsActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="managelessonsActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
