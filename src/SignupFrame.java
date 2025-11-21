@@ -14,9 +14,8 @@ public class SignupFrame extends javax.swing.JFrame {
     // Initialize all GUI components (NetBeans-generated)
     initComponents();
 
-    // Fix the role combo box to have only Student and Instructor
     roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(
-        new String[] { "Student", "Instructor" }
+        new String[] { "Student", "Instructor", "Admin" }
     ));
 
     // Set the close operation to dispose the window instead of exiting the app
@@ -67,7 +66,7 @@ public class SignupFrame extends javax.swing.JFrame {
 
         passwordLabel1.setText("Role:");
 
-        roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Instructor", " " }));
+        roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Instructor", "Admin" }));
         roleComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roleComboBoxActionPerformed(evt);

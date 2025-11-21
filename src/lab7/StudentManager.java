@@ -34,22 +34,35 @@ public class StudentManager {
 
     // ===================== Browse Courses =====================
     public List<Course> getAllCourses() {
-        return courses;
+       List<Course> approvedCourses = new ArrayList<>();
+    for (Course course : courses) { 
+        // NEW FILTER: Only return APPROVED courses
+        if (course.getStatus() == ApprovalStatus.APPROVED) { 
+            approvedCourses.add(course);
+        }
+    }
+    return approvedCourses;
+        
     }
 
     // ===================== Enroll in Course =====================
     public boolean enrollCourse(Student student, String courseId) {
-        Course course = getCourseById(courseId);
-        if (course == null) return false;
+    Course course = getCourseById(courseId);
+    if (course == null) return false;
 
-        if (!student.getEnrolledCourses().contains(courseId)) {
-            student.enrollCourse(courseId);
-            course.enrollStudent(student.getUserId());
-            saveAll();
-            return true;
-        }
-        return false; // already enrolled
+    if (course.getStatus() != ApprovalStatus.APPROVED) {
+        return false; // Enrollment fails if not approved
     }
+    
+    
+    if (!student.getEnrolledCourses().contains(courseId)) {
+        course.enrollStudent(student.getUserId());
+        student.enrollCourse(courseId);
+        saveAll();
+        return true;
+    }
+    return false;
+}
 
     // ===================== Access Lessons =====================
     public List<Lesson> getLessonsForCourse(String courseId) {

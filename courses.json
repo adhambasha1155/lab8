@@ -5,6 +5,7 @@
     "title": "Java Basics",
     "courseId": "C1",
     "instructorId": "U2",
+    "status": "PENDING",
     "lessons": [
       {
         "lessonId": "L1",
@@ -29,6 +30,7 @@
     "title": "Java Basics",
     "courseId": "C2",
     "instructorId": "I1",
+    "status": "PENDING",
     "lessons": [
       {
         "lessonId": "L1",
@@ -50,6 +52,7 @@
     "title": "Advanced Java",
     "courseId": "C3",
     "instructorId": "I1",
+    "status": "PENDING",
     "lessons": [{
       "lessonId": "L1",
       "resources": [],
@@ -63,19 +66,12 @@
     "title": "electronics",
     "courseId": "978",
     "instructorId": "U3",
-    "lessons": [
-      {
-        "lessonId": "L1",
-        "resources": [],
-        "title": "elec intro",
-        "content": "dfg"
-      },
-      {
-        "lessonId": "dfghj",
-        "resources": [],
-        "title": "ty",
-        "content": "for"
-      }
-    ]
+    "status": "APPROVED",
+    "lessons": [{
+      "lessonId": "L1",
+      "resources": [],
+      "title": "elec intro",
+      "content": "dfg"
+    }]
   }
 ]

@@ -1,6 +1,7 @@
 
 import Lab7.User;
 import Lab7.UserAccountManager;
+import javax.swing.JTable;
 
 
 public class StudentDashboardFrame extends javax.swing.JFrame {
@@ -105,9 +106,11 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_enrolledCoursesActionPerformed
 
     private void viewLessonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLessonsActionPerformed
-        LessonsFrame lessonsFrame = new LessonsFrame(accountManager, currentUser);
-        lessonsFrame.setVisible(true);
-        this.dispose(); // optional: close dashboard
+       // Instead of opening lessons directly, open the list of courses
+    // so the user can SELECT which course to view.
+    EnrolledCoursesFrame enrolledFrame = new EnrolledCoursesFrame(accountManager, currentUser);
+    enrolledFrame.setVisible(true);
+    this.dispose(); // Close the dashboard
     }//GEN-LAST:event_viewLessonsActionPerformed
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
@@ -116,37 +119,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutActionPerformed
     
     
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudentDashboardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudentDashboardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudentDashboardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StudentDashboardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new StudentDashboardFrame().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseCoursesButton;
