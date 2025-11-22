@@ -10,7 +10,7 @@
 import Lab7.InstructorManager;
 import Lab7.Course; // Assuming Course class is in Lab7 package
 import Lab7.Instructor;
-import Lab7.Lesson;
+import Lab7.Lesson1;
 import Lab7.StudentManager;
 import Lab7.UserAccountManager; // Needed if you want to perform a full logout
 import javax.swing.*;

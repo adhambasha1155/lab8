@@ -16,7 +16,7 @@ public class JsonDatabaseManager {
     /**
      * Helper method to parse a Question object from JSON.
      */
-    private Question loadQuestionFromJson(JSONObject qObj) {
+    private Question1 loadQuestionFromJson(JSONObject qObj) {
         // Helper to convert JSONArray of options to List<String>
         List<String> options = new ArrayList<>();
         JSONArray optionsArr = qObj.getJSONArray("options");
@@ -25,7 +25,7 @@ public class JsonDatabaseManager {
         }
 
         // Assuming your question class is named 'Question'
-        return new Question(
+        return new Question1(
                 qObj.getString("questionText"),
                 options,
                 qObj.getInt("correctIndex")
@@ -35,8 +35,8 @@ public class JsonDatabaseManager {
     /**
      * Helper method to parse a Quiz object from JSON.
      */
-    private Quiz loadQuizFromJson(JSONObject quizObj) {
-        Quiz quiz = new Quiz(
+    private Quiz1 loadQuizFromJson(JSONObject quizObj) {
+        Quiz1 quiz = new Quiz1(
                 quizObj.getString("quizId"),
                 quizObj.getString("title")
         );
@@ -45,7 +45,7 @@ public class JsonDatabaseManager {
         if (questionsArr != null) {
             for (int k = 0; k < questionsArr.length(); k++) {
                 JSONObject qObj = questionsArr.getJSONObject(k);
-                Question question = loadQuestionFromJson(qObj);
+                Question1 question = loadQuestionFromJson(qObj);
                 quiz.addQuestion(question);
             }
         }
@@ -231,7 +231,7 @@ public class JsonDatabaseManager {
                 if (lArr != null) {
                     for (int j = 0; j < lArr.length(); j++) {
                         JSONObject lObj = lArr.getJSONObject(j);
-                        Lesson lesson = new Lesson(
+                        Lesson1 lesson = new Lesson1(
                                 lObj.getString("lessonId"),
                                 lObj.getString("title"),
                                 lObj.getString("content")
@@ -248,7 +248,7 @@ public class JsonDatabaseManager {
                         // ✨ NEW: Load Quiz for the lesson
                         JSONObject quizObj = lObj.optJSONObject("quiz");
                         if (quizObj != null) {
-                            Quiz quiz = loadQuizFromJson(quizObj);
+                            Quiz1 quiz = loadQuizFromJson(quizObj);
                             lesson.setQuiz(quiz);
                         }
 

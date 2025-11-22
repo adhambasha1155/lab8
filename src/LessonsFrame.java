@@ -1,5 +1,5 @@
 import Lab7.Course;
-import Lab7.Lesson;
+import Lab7.Lesson1;
 import Lab7.Student;
 import Lab7.User;
 import Lab7.UserAccountManager;
@@ -44,8 +44,8 @@ public class LessonsFrame extends javax.swing.JFrame {
         Course course = accountManager.getCourseById(courseId);
         if (course == null) return;
 
-        List<Lesson> lessons = course.getLessons();
-        for (Lesson lesson : lessons) {
+        List<Lesson1> lessons = course.getLessons();
+        for (Lesson1 lesson : lessons) {
             boolean completed = false;
             if (currentUser instanceof Student) {
                 Student student = (Student) currentUser;

@@ -65,20 +65,72 @@ public class StudentManager {
 }
 
     // ===================== Access Lessons =====================
-    public List<Lesson> getLessonsForCourse(String courseId) {
+    public List<Lesson1> getLessonsForCourse(String courseId) {
         Course course = getCourseById(courseId);
         if (course != null) return course.getLessons();
         return new ArrayList<>();
     }
 
-    // ===================== Mark Lesson Completed =====================
+   public Result submitQuiz(Student student, String courseId, String lessonId, List<Integer> studentAnswers) {
+        Course course = getCourseById(courseId);
+        if (course == null) return null;
+
+        Lesson1 lesson = course.getLessonById(lessonId);
+        Quiz1 quiz = (lesson != null) ? lesson.getQuiz() : null;
+        if (quiz == null) return null; // No quiz found for this lesson
+
+        // Find or create the Result object for this student and lesson
+        Result result = student.getResultForLesson(lessonId);
+        int maxRetries = 3; // Default max retries (e.g.)
+
+        if (result == null) {
+            result = new Result(student.getUserId(), lessonId, maxRetries);
+            student.getQuizResults().add(result);
+        } else if (result.hasReachedMaxRetries()) {
+            return null; // Cannot submit, max retries reached
+        }
+
+        // Calculate Score
+        int score = quiz.calculateScore(studentAnswers);
+
+        // Add the attempt
+        result.addAttempt(score);
+        
+        // Save student/result changes
+        saveAll(); 
+
+        return result;
+    }
+
+
+    // ===================== Mark Lesson Completed (UPDATED LOGIC) =====================
+    /**
+     * Marks a lesson as completed only if there is no quiz, or if a quiz exists 
+     * and the student has scored >= 50.
+     */
     public boolean markLessonCompleted(Student student, String courseId, String lessonId) {
         Course course = getCourseById(courseId);
         if (course == null) return false;
 
-        Lesson lesson = course.getLessonById(lessonId);
+        Lesson1 lesson = course.getLessonById(lessonId);
         if (lesson == null) return false;
 
+        // --- NEW QUIZ CHECK LOGIC ---
+        if (lesson.getQuiz() != null) {
+            Result result = student.getResultForLesson(lessonId);
+            
+            // Check if student has taken the quiz and scored over 50
+            if (result == null || result.getHighestScore() < 50) {
+                // Lesson completion failed: Quiz not taken or score too low
+                return false; 
+            }
+        }
+        // --- END NEW QUIZ CHECK LOGIC ---
+        
+        // If the code reaches here, either:
+        // 1. There was no quiz.
+        // 2. There was a quiz, and the highest score was >= 50.
+        
         student.markLessonCompleted(courseId, lessonId);
         saveAll();
         return true;
@@ -94,7 +146,7 @@ public class StudentManager {
         if (course == null) return titles;
 
         for (String lessonId : completedIds) {
-            Lesson lesson = course.getLessonById(lessonId);
+            Lesson1 lesson = course.getLessonById(lessonId);
             if (lesson != null) titles.add(lesson.getTitle());
         }
 

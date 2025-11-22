@@ -73,8 +73,8 @@ public class Result {
     }
 
 
-    public boolean isLessonCompleted(Lesson lesson) {
-    Quiz q = lesson.getquiz();
+    public boolean isLessonCompleted(Lesson1 lesson) {
+    Quiz1 q = lesson.getquiz();
     if (q == null) return false;
 
     int highestScore = getHighestScore();
