@@ -12,6 +12,16 @@ public class InstructorManager {
         jsonDB = new JsonDatabaseManager();       // initialize JSON manager
         courses = jsonDB.loadCourses();           // load existing courses from courses.json
     }
+    public boolean setLessonQuiz(Course course, Lesson lesson, Quiz quiz) {
+        if (course == null || lesson == null || quiz == null) return false;
+        
+        lesson.setQuiz(quiz); 
+
+        // Save changes to JSON (Quiz is now part of the Course structure)
+        jsonDB.saveCourses(courses);
+
+        return true;
+    }
 
     // ===================== Create Course =====================
    public Course createCourse(Instructor instructor, String courseId, String title, String description) {
@@ -19,6 +29,7 @@ public class InstructorManager {
     if (getCourseById(courseId) != null) {
         return null;
     }
+    
 
    
     Course course = new Course(courseId, title, description, instructor.getUserId());

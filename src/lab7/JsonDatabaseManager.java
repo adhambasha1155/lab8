@@ -2,13 +2,82 @@ package Lab7;
 
 import java.io.*;
 import java.util.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class JsonDatabaseManager {
 
     private final String USERS_FILE = "users.json";
     private final String COURSES_FILE = "courses.json";
 
-    // ===================== Load Users =====================
+    // =========================================================================================
+    // NEW HELPER METHODS FOR DESERIALIZING QUIZ AND RESULT STRUCTURES
+    // =========================================================================================
+    /**
+     * Helper method to parse a Question object from JSON.
+     */
+    private Question loadQuestionFromJson(JSONObject qObj) {
+        // Helper to convert JSONArray of options to List<String>
+        List<String> options = new ArrayList<>();
+        JSONArray optionsArr = qObj.getJSONArray("options");
+        for (int l = 0; l < optionsArr.length(); l++) {
+            options.add(optionsArr.getString(l));
+        }
+
+        // Assuming your question class is named 'Question'
+        return new Question(
+                qObj.getString("questionText"),
+                options,
+                qObj.getInt("correctIndex")
+        );
+    }
+
+    /**
+     * Helper method to parse a Quiz object from JSON.
+     */
+    private Quiz loadQuizFromJson(JSONObject quizObj) {
+        Quiz quiz = new Quiz(
+                quizObj.getString("quizId"),
+                quizObj.getString("title")
+        );
+
+        JSONArray questionsArr = quizObj.optJSONArray("questions");
+        if (questionsArr != null) {
+            for (int k = 0; k < questionsArr.length(); k++) {
+                JSONObject qObj = questionsArr.getJSONObject(k);
+                Question question = loadQuestionFromJson(qObj);
+                quiz.addQuestion(question);
+            }
+        }
+        return quiz;
+    }
+
+    /**
+     * Helper method to parse a Result object from JSON.
+     */
+    private Result loadResultFromJson(JSONObject resultObj) {
+        Result result = new Result(
+                resultObj.getString("studentId"),
+                resultObj.getString("lessonId"),
+                resultObj.getInt("maxRetries")
+        );
+
+        JSONArray attemptsArr = resultObj.optJSONArray("attempts");
+        if (attemptsArr != null) {
+            for (int k = 0; k < attemptsArr.length(); k++) {
+                JSONObject attemptObj = attemptsArr.getJSONObject(k);
+                int score = attemptObj.getInt("score");
+                // The inner class Result.Attempt should have a constructor that takes the JSONObject
+                result.addAttempt(score) ;
+                //result.getAttempts().add(new Result().addAttempt(score)); 
+            }
+
+        }
+            return result;
+    }
+        // =========================================================================================
+        // LOAD USERS (UPDATED TO LOAD QUIZ RESULTS FOR STUDENTS)
+        // =========================================================================================
     public List<User> loadUsers() {
         List<User> users = new ArrayList<>();
 
@@ -25,63 +94,83 @@ public class JsonDatabaseManager {
             BufferedReader br = new BufferedReader(new FileReader(file));
             StringBuilder sb = new StringBuilder();
             String line;
-            while ((line = br.readLine()) != null) sb.append(line);
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
             br.close();
 
             String content = sb.toString().trim();
-            if (content.equals("[]") || content.isEmpty()) return users;
+            if (content.equals("[]") || content.isEmpty()) {
+                return users;
+            }
 
             // Parse JSON
-            org.json.JSONArray arr = new org.json.JSONArray(content);
+            JSONArray arr = new JSONArray(content);
 
             for (int i = 0; i < arr.length(); i++) {
-                org.json.JSONObject obj = arr.getJSONObject(i);
+                JSONObject obj = arr.getJSONObject(i);
                 String userId = obj.getString("userId");
                 String username = obj.getString("username");
                 String email = obj.getString("email");
                 String passwordHash = obj.getString("passwordHash");
                 String role = obj.getString("role");
 
-                if (role.equalsIgnoreCase("Student")) {
-                    Student s = new Student(userId, username, email, passwordHash);
+                User user = null;
+
+                if ("Student".equals(role)) {
+                    Student student = new Student(userId, username, email, passwordHash);
 
                     // Load enrolled courses
-                    org.json.JSONArray enrolledArr = obj.optJSONArray("enrolledCourses");
-                    if (enrolledArr != null) {
-                        for (int j = 0; j < enrolledArr.length(); j++) {
-                            s.enrollCourse(enrolledArr.getString(j));
+                    JSONArray enrolledCoursesArr = obj.optJSONArray("enrolledCourses");
+                    if (enrolledCoursesArr != null) {
+                        for (int j = 0; j < enrolledCoursesArr.length(); j++) {
+                            student.enrollCourse(enrolledCoursesArr.getString(j));
                         }
                     }
 
-                    // Load progress
-                    org.json.JSONArray progressArr = obj.optJSONArray("progress");
+                    // Load progress (completed lessons)
+                    JSONArray progressArr = obj.optJSONArray("progress");
                     if (progressArr != null) {
                         for (int j = 0; j < progressArr.length(); j++) {
-                            String entry = progressArr.getString(j);
+                            String entry = progressArr.getString(j); // e.g., "C001:L01"
                             String[] parts = entry.split(":");
-                            if (parts.length == 2) s.markLessonCompleted(parts[0], parts[1]);
+                            if (parts.length == 2) {
+                                student.markLessonCompleted(parts[0], parts[1]);
+                            }
                         }
                     }
 
-                    users.add(s);
+                    // ✨ NEW: Load quiz results for the student
+                    JSONArray resultsArr = obj.optJSONArray("quizResults");
+                    if (resultsArr != null) {
+                        for (int j = 0; j < resultsArr.length(); j++) {
+                            JSONObject resultObj = resultsArr.getJSONObject(j);
+                            Result result = loadResultFromJson(resultObj);
+                            student.getQuizResults().add(result);
+                        }
+                    }
 
-                } else if (role.equalsIgnoreCase("Instructor")) {
-                    Instructor ins = new Instructor(userId, username, email, passwordHash);
+                    user = student;
+
+                } else if ("Instructor".equals(role)) {
+                    Instructor instructor = new Instructor(userId, username, email, passwordHash);
 
                     // Load created courses
-                    org.json.JSONArray createdArr = obj.optJSONArray("createdCourses");
-                    if (createdArr != null) {
-                        for (int j = 0; j < createdArr.length(); j++) {
-                            ins.addCourse(createdArr.getString(j));
+                    JSONArray createdCoursesArr = obj.optJSONArray("createdCourses");
+                    if (createdCoursesArr != null) {
+                        for (int j = 0; j < createdCoursesArr.length(); j++) {
+                            instructor.addCourse(createdCoursesArr.getString(j));
                         }
                     }
+                    user = instructor;
 
-                    users.add(ins);
-                } else if (role.equals("Admin")) { // <--- NEW ADMIN LOADING
-                     Admin admin = new Admin(userId, username, email, passwordHash);
-                     users.add(admin);
-        
-                 }
+                } else if ("Admin".equals(role)) {
+                    user = new Admin(userId, username, email, passwordHash);
+                }
+
+                if (user != null) {
+                    users.add(user);
+                }
             }
 
         } catch (Exception e) {
@@ -91,27 +180,9 @@ public class JsonDatabaseManager {
         return users;
     }
 
-
-    // ===================== Save Users =====================
-    public void saveUsers(List<User> users) {
-        try {
-            org.json.JSONArray arr = new org.json.JSONArray();
-
-            for (User u : users) {
-                arr.put(u.toJson()); // toJson() now returns JSONObject
-            }
-
-            FileWriter fw = new FileWriter(USERS_FILE);
-            fw.write(arr.toString(2)); // pretty print with indentation
-            fw.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    // ===================== Load Courses =====================
+    // =========================================================================================
+    // LOAD COURSES (UPDATED TO LOAD QUIZ FOR LESSONS)
+    // =========================================================================================
     public List<Course> loadCourses() {
         List<Course> courses = new ArrayList<>();
 
@@ -128,57 +199,65 @@ public class JsonDatabaseManager {
             BufferedReader br = new BufferedReader(new FileReader(file));
             StringBuilder sb = new StringBuilder();
             String line;
-            while ((line = br.readLine()) != null) sb.append(line);
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
             br.close();
 
             String content = sb.toString().trim();
-            if (content.equals("[]") || content.isEmpty()) return courses;
+            if (content.equals("[]") || content.isEmpty()) {
+                return courses;
+            }
 
             // Parse JSON
-            org.json.JSONArray arr = new org.json.JSONArray(content);
+            JSONArray arr = new JSONArray(content);
 
             for (int i = 0; i < arr.length(); i++) {
-                org.json.JSONObject obj = arr.getJSONObject(i);
+                JSONObject obj = arr.getJSONObject(i);
 
-                String courseId = obj.getString("courseId");
-                String title = obj.getString("title");
-                String description = obj.getString("description");
-                String instructorId = obj.getString("instructorId");
+                Course course = new Course(
+                        obj.getString("courseId"),
+                        obj.getString("title"),
+                        obj.getString("description"),
+                        obj.getString("instructorId")
+                );
 
-                Course course = new Course(courseId, title, description, instructorId);
-                String statusString = obj.optString("status", ApprovalStatus.PENDING.name()); 
-                try {
-                    course.setStatus(ApprovalStatus.valueOf(statusString)); 
-                } catch (IllegalArgumentException e) {
-                    // Safety net: If status in JSON is corrupted, default to PENDING.
-                    course.setStatus(ApprovalStatus.PENDING);
-                }
+                // Load status
+                String statusStr = obj.optString("status", ApprovalStatus.PENDING.name());
+                course.setStatus(ApprovalStatus.valueOf(statusStr));
 
                 // Load lessons
-                org.json.JSONArray lessonsArr = obj.optJSONArray("lessons");
-                if (lessonsArr != null) {
-                    for (int j = 0; j < lessonsArr.length(); j++) {
-                        org.json.JSONObject lObj = lessonsArr.getJSONObject(j);
-                        String lessonId = lObj.getString("lessonId");
-                        String lessonTitle = lObj.getString("title");
-                        String lessonContent = lObj.getString("content");
-
-                        Lesson lesson = new Lesson(lessonId, lessonTitle, lessonContent);
+                JSONArray lArr = obj.optJSONArray("lessons");
+                if (lArr != null) {
+                    for (int j = 0; j < lArr.length(); j++) {
+                        JSONObject lObj = lArr.getJSONObject(j);
+                        Lesson lesson = new Lesson(
+                                lObj.getString("lessonId"),
+                                lObj.getString("title"),
+                                lObj.getString("content")
+                        );
 
                         // Load resources
-                        org.json.JSONArray resArr = lObj.optJSONArray("resources");
+                        JSONArray resArr = lObj.optJSONArray("resources");
                         if (resArr != null) {
                             for (int k = 0; k < resArr.length(); k++) {
                                 lesson.addResource(resArr.getString(k));
                             }
                         }
 
+                        // ✨ NEW: Load Quiz for the lesson
+                        JSONObject quizObj = lObj.optJSONObject("quiz");
+                        if (quizObj != null) {
+                            Quiz quiz = loadQuizFromJson(quizObj);
+                            lesson.setQuiz(quiz);
+                        }
+
                         course.addLesson(lesson);
                     }
                 }
 
-                // Load students
-                org.json.JSONArray studentsArr = obj.optJSONArray("students");
+                // Load enrolled student IDs
+                JSONArray studentsArr = obj.optJSONArray("students");
                 if (studentsArr != null) {
                     for (int j = 0; j < studentsArr.length(); j++) {
                         course.enrollStudent(studentsArr.getString(j));
@@ -195,14 +274,35 @@ public class JsonDatabaseManager {
         return courses;
     }
 
+    // =========================================================================================
+    // SAVE USERS (No change needed, relies on updated toJson() method in User/Student)
+    // =========================================================================================
+    public void saveUsers(List<User> users) {
+        try {
+            JSONArray arr = new JSONArray();
 
-    // ===================== Save Courses =====================
+            for (User user : users) {
+                arr.put(user.toJson()); // toJson() now handles quizResults for Student
+            }
+
+            FileWriter fw = new FileWriter(USERS_FILE);
+            fw.write(arr.toString(2)); // pretty print with indentation
+            fw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // =========================================================================================
+    // SAVE COURSES (No change needed, relies on updated toJson() method in Course/Lesson)
+    // =========================================================================================
     public void saveCourses(List<Course> courses) {
         try {
-            org.json.JSONArray arr = new org.json.JSONArray();
+            JSONArray arr = new JSONArray();
 
             for (Course course : courses) {
-                arr.put(course.toJson()); // toJson() now returns JSONObject
+                arr.put(course.toJson()); // toJson() now handles Quiz for Lesson
             }
 
             FileWriter fw = new FileWriter(COURSES_FILE);
@@ -213,5 +313,4 @@ public class JsonDatabaseManager {
             e.printStackTrace();
         }
     }
-
 }
