@@ -25,7 +25,6 @@ import Lab7.Lesson1;
 import Lab7.Result1;
 import Lab7.Quiz1;
 
-
 public class Certificate {
 
     private String certificateId;
@@ -79,60 +78,55 @@ public class Certificate {
     }
 
     public static Certificate generateCertificate(Student s, Course c) throws IOException {
-if(!isCourseCompleted(s,c)){
-        Certificate cert = new Certificate(s.getUserId(), c.getCourseId());
-        s.addCertificate(cert);
-        String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
-        JSONArray usersArr = new JSONArray(content);
-        for (int i = 0; i < usersArr.length(); i++) {
-            JSONObject u = usersArr.getJSONObject(i);
-            if (u.getString("userId").equals(cert.getStudentID())) {
-                if (!u.has("certificates")) {
-                    u.put("certificates", new JSONArray());
+        if (isCourseCompleted(s, c)) {
+            Certificate cert = new Certificate(s.getUserId(), c.getCourseId());
+            s.addCertificate(cert);
+            String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+            JSONArray usersArr = new JSONArray(content);
+            for (int i = 0; i < usersArr.length(); i++) {
+                JSONObject u = usersArr.getJSONObject(i);
+                if (u.getString("userId").equals(cert.getStudentID())) {
+                    if (!u.has("certificates")) {
+                        u.put("certificates", new JSONArray());
+                    }
+                    JSONObject certObj = cert.toJson();
+                    u.getJSONArray("certificates").put(certObj);
+                    break;
                 }
-                JSONObject certObj = c.toJson();
-                u.getJSONArray("certificates").put(certObj);
-                break;
             }
+            Files.write(Paths.get(USERS_FILE), usersArr.toString(4).getBytes());
+            return cert;
+        } else {
+            return null;
         }
-        Files.write(Paths.get(USERS_FILE), usersArr.toString(4).getBytes());
-return cert;
-}
-else{
-    return null;
-}
     }
 
     public static ArrayList<Certificate> getCertificates(Student student) throws IOException {
-
         ArrayList<Certificate> result = new ArrayList<>();
+        String content = new String(Files.readAllBytes(Paths.get(USERS_FILE)));
+        JSONArray usersArr = new JSONArray(content);
 
-        JsonDatabaseManager db = new JsonDatabaseManager();
-        List<User> users = db.loadUsers();
+        for (int i = 0; i < usersArr.length(); i++) {
+            JSONObject u = usersArr.getJSONObject(i);
 
-        for (User u : users) {
+            if (u.getString("userId").equals(student.getUserId())) {
 
-            if (u.getUserId().equals(student.getUserId())) {
+                if (u.has("certificates")) {
+                    JSONArray certsArr = u.getJSONArray("certificates");
 
-                if (!(u instanceof Student)) {
-                    return result;
+                    for (int j = 0; j < certsArr.length(); j++) {
+                        JSONObject certObj = certsArr.getJSONObject(j);
+                        Certificate cert = Certificate.fromJson(certObj);
+                        result.add(cert);
+                    }
                 }
-
-                Student s = (Student) u;
-                if (s.getCertificates() == null) {
-                    return result;
-                }
-
-                for (Certificate c : s.getCertificates()) {
-                    result.add(c);
-                }
-
                 break;
             }
         }
 
         return result;
     }
+
     public static boolean isCourseCompleted(Student student, Course course) {
 
         int totalQuizzes = course.getLessons().size();
