@@ -18,6 +18,9 @@ public class Lesson {
         this.resources = new ArrayList<>();
     }
 
+    public Lesson() {
+    }
+
     public void setLessonId(String lessonId) {
         this.lessonId = lessonId;
     }
@@ -48,5 +51,13 @@ public class Lesson {
         obj.put("content", content);
         obj.put("resources", new JSONArray(resources));
         return obj;
+    }
+
+    quiz getquiz() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    int getPassingScore() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

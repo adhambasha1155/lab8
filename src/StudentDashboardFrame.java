@@ -29,6 +29,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         viewLessonsButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         browseCoursesButton = new javax.swing.JButton();
+        enrolledCoursesButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,6 +63,13 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
             }
         });
 
+        enrolledCoursesButton1.setText("quiz");
+        enrolledCoursesButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enrolledCoursesButton1enrolledCoursesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -71,7 +79,9 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(browseCoursesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(67, 67, 67)
-                .addComponent(enrolledCoursesButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(enrolledCoursesButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(enrolledCoursesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addComponent(viewLessonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55)
@@ -87,7 +97,9 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                     .addComponent(enrolledCoursesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(viewLessonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(231, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(enrolledCoursesButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(150, Short.MAX_VALUE))
         );
 
         pack();
@@ -117,6 +129,13 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         this.dispose(); // close current dashboard
         new LoginFrame(accountManager).setVisible(true); // go back to login
     }//GEN-LAST:event_logoutActionPerformed
+
+    private void enrolledCoursesButton1enrolledCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrolledCoursesButton1enrolledCoursesActionPerformed
+        // TODO add your handling code here:
+        quiz q=new quiz();
+        q.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_enrolledCoursesButton1enrolledCoursesActionPerformed
     
     
     
@@ -124,6 +143,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseCoursesButton;
     private javax.swing.JButton enrolledCoursesButton;
+    private javax.swing.JButton enrolledCoursesButton1;
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton viewLessonsButton;
     private javax.swing.JLabel welcomeLabel;
