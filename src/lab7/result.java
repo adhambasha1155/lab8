@@ -24,7 +24,7 @@ public class Result {
     }
 
     // Add an attempt
-    public void addAttempt(int score) {
+    public  void addAttempt(int score) {
         if (attempts.size() < maxRetries) {
             attempts.add(new Attempt(score));
         } else {
@@ -51,6 +51,9 @@ public class Result {
             if (a.getScore() > max) max = a.getScore();
         }
         return max;
+    }
+    public boolean hasReachedMaxRetries() {
+        return attempts.size() >= maxRetries;
     }
 
     // Convert to JSON
