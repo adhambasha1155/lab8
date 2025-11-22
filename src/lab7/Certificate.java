@@ -22,6 +22,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import Lab7.Lesson1;
+import Lab7.Result1;
+import Lab7.Quiz1;
 
 
 public class Certificate {
@@ -136,14 +138,14 @@ else{
         int totalQuizzes = course.getLessons().size();
         int passedQuizzes = 0;
 
-        for (Lesson lesson : course.getLessons()) {
+        for (Lesson1 lesson : course.getLessons()) {
 
-            quiz q = lesson.getQuiz();
+            Quiz1 q = lesson.getQuiz();
 
             // Student result:
-            QuizResult result = student.getQuizResult(course.getCourseId(), quiz.getQuizId());
+            Result1 result = student.getResultForLesson(lesson.getLessonId());
 
-            if (result != null && result.isPassed()) {
+            if (result != null && result.isLessonCompleted(lesson)) {
                 passedQuizzes++;
             }
         }
