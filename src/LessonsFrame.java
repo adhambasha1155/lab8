@@ -1,5 +1,7 @@
 import Lab7.Course;
 import Lab7.Lesson1;
+import Lab7.Quiz1;
+import Lab7.Result1;
 import Lab7.Student;
 import Lab7.User;
 import Lab7.UserAccountManager;
@@ -164,27 +166,62 @@ public class LessonsFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void markCompletedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markCompletedButtonActionPerformed
-     int row = LessonsTable.getSelectedRow();
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a lesson first.");
+     // 1. Get Selected Lesson
+    int selectedRow = LessonsTable.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a lesson to mark as completed.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    String lessonId = (String) model.getValueAt(selectedRow, 0);
+
+    // 2. Initial Checks
+    if (!(currentUser instanceof Student)) {
+        JOptionPane.showMessageDialog(this, "Only students can mark lessons as complete.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    Student student = (Student) currentUser;
+    Course course = accountManager.getCourseById(courseId);
+    if (course == null) return;
+
+    Lesson1 lesson = course.getLessonById(lessonId);
+    if (lesson == null) return;
+    
+    if (student.isLessonCompleted(courseId, lessonId)) {
+        JOptionPane.showMessageDialog(this, "Lesson is already marked as completed.", "Status", JOptionPane.INFORMATION_MESSAGE);
         return;
     }
 
-    String lessonId = (String) model.getValueAt(row, 0);
+    // 3. Perform Quiz Check (The new requirement)
+    Quiz1 quiz = lesson.getQuiz();
+    int passingScore = lesson.getPassingScore(); 
 
-    // Check if already completed
-    if (currentUser instanceof Student) {
-        Student student = (Student) currentUser;
-        if (student.isLessonCompleted(courseId, lessonId)) {
-            JOptionPane.showMessageDialog(this, "Lesson is already marked as completed.");
-            return;
-        }
-        else {
-            quiz q=new quiz();
-        q.setVisible(true);
-    this.dispose();
-        }
+    // A. Check for quiz availability
+    if (quiz == null) {
+        JOptionPane.showMessageDialog(this, 
+            "The instructor has not created a quiz yet. This lesson cannot be marked complete.", 
+            "No Quiz Available", JOptionPane.WARNING_MESSAGE);
+        return; // BLOCK completion
     }
+
+    // B. Check for passing score
+    Result1 result = student.getResultForLesson(lessonId);
+
+    if (result == null || result.getHighestScore() < passingScore) {
+        JOptionPane.showMessageDialog(this, 
+            "You must pass the quiz (score of " + passingScore + " or higher) before marking this lesson complete. " +
+            "Your highest score is " + (result != null ? result.getHighestScore() : 0) + ".", 
+            "Quiz Required", JOptionPane.WARNING_MESSAGE);
+        return; // BLOCK completion
+    }
+    
+    // 4. Mark Complete and Save
+    student.markLessonCompleted(courseId, lessonId);
+    accountManager.saveUser(student); // Saves the updated student object
+    
+    JOptionPane.showMessageDialog(this, "Lesson marked as completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    
+    loadLessons();
     
     }//GEN-LAST:event_markCompletedButtonActionPerformed
 
@@ -197,6 +234,45 @@ public class LessonsFrame extends javax.swing.JFrame {
 
     private void takeQuizbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_takeQuizbuttonActionPerformed
         // TODO add your handling code here:
+        int selectedRow = LessonsTable.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a lesson to take the quiz.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    String lessonId = (String) model.getValueAt(selectedRow, 0);
+
+    // 2. Find Course and Lesson
+    Course course = accountManager.getCourseById(courseId);
+    Lesson1 lesson = course.getLessonById(lessonId);
+
+    // 3. Check for Quiz Availability
+    Quiz1 quiz = lesson.getQuiz();
+    if (quiz == null) {
+        JOptionPane.showMessageDialog(this, 
+            "The instructor has not created a quiz for this lesson yet.", 
+            "No Quiz Available", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+
+    // 4. Check for Max Retries (If you want to enforce retries here)
+    if (currentUser instanceof Student) {
+        Student student = (Student) currentUser;
+        Result1 result = student.getResultForLesson(lessonId);
+
+        // Assuming a max retries of 3 is enforced via Result1 object
+        if (result != null && result.hasReachedMaxRetries()) {
+             JOptionPane.showMessageDialog(this, "You have reached the maximum number of retries for this quiz.", 
+                 "Max Retries Reached", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+
+        // 5. Launch the QuizFrame
+        QuizFrame quizFrame = new QuizFrame(accountManager, student, courseId, lesson);
+        quizFrame.setVisible(true);
+        // Do NOT dispose LessonsFrame, let the user keep the lesson view open
+    } else {
+         JOptionPane.showMessageDialog(this, "Only students can take quizzes.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_takeQuizbuttonActionPerformed
 
     /**
