@@ -11,16 +11,25 @@ public class Lesson1 {
     private String content;
     private List<String> resources;
     private Quiz1 quiz;
+    private int passingScore;
 
-    public Lesson1(String lessonId, String title, String content) {
+    public Lesson1(String lessonId, String title, String content, int passingScore) {
         this.lessonId = lessonId;
         this.title = title;
         this.content = content;
         this.resources = new ArrayList<>();
         this.quiz = null;
+        this.passingScore = passingScore;
     }
 
+   public Lesson1(String lessonId, String title, String content) {
+        this(lessonId, title, content, 50); // 🔑 Calls the full constructor with a default passing score of 70
+    }
+    
     public Lesson1() {
+        this.resources = new ArrayList<>();
+        // Default constructor should initialize new field as well
+        this.passingScore = 50; // 🔑 Default passing score
     }
 
     public void setLessonId(String lessonId) {
@@ -40,6 +49,12 @@ public class Lesson1 {
     }
     public Quiz1 getQuiz() { return quiz;}
     public void setQuiz(Quiz1 quiz) {this.quiz = quiz; }
+    public void setPassingScore(int passingScore) {
+        this.passingScore = passingScore;
+    }
+    public int getPassingScore() {
+            return quiz.getPassingScore();
+    }
 
     public void addResource(String resource) { resources.add(resource); }
 
@@ -54,17 +69,11 @@ public class Lesson1 {
         obj.put("title", title);
         obj.put("content", content);
         obj.put("resources", new JSONArray(resources));
+        obj.put("passingScore", passingScore);
         if(quiz != null){
             obj.put("quiz",quiz.toJson());
         }
         return obj;
     }
 
-    Quiz1 getquiz() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    int getPassingScore() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

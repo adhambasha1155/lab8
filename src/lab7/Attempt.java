@@ -1,4 +1,4 @@
-package lab7;
+package Lab7;
  
 import org.json.JSONObject;
 

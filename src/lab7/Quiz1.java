@@ -10,15 +10,28 @@ public class Quiz1 {
     private String quizId;
     private String title;
     private List<Question1> questions;
+    private int passingScore;
 
-    public Quiz1(String quizId, String title) {
+    public Quiz1(String quizId, String title, int passingScore) {
         this.quizId = quizId;
         this.title = title;
         this.questions = new ArrayList<>();
+        this.passingScore = passingScore;
+    }
+    public Quiz1(String quizId, String title) {
+        this(quizId, title, 50); // Default passing score of 50
     }
 
     public Quiz1() {
         this.questions = new ArrayList<>();
+    }
+    public int getPassingScore() {
+        return passingScore;
+    }
+    
+    // NEW Setter (for instructor to change it later)
+    public void setPassingScore(int passingScore) {
+        this.passingScore = passingScore;
     }
 
     // Add a question
