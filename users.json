@@ -3,6 +3,7 @@
     "role": "Student",
     "enrolledCourses": [],
     "progress": [],
+    "quizResults": [],
     "userId": "U100",
     "email": "test@example.com",
     "passwordHash": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
@@ -12,6 +13,7 @@
     "role": "Student",
     "enrolledCourses": [],
     "progress": [],
+    "quizResults": [],
     "userId": "U2",
     "email": "tes@example.com",
     "passwordHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
@@ -27,8 +29,14 @@
   },
   {
     "role": "Student",
-    "enrolledCourses": [],
+    "enrolledCourses": ["978"],
     "progress": [],
+    "quizResults": [{
+      "studentId": "U4",
+      "maxRetries": 3,
+      "lessonId": "L1",
+      "attempts": [{"score": 75}]
+    }],
     "userId": "U4",
     "email": "ss@ss",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",

@@ -10,12 +10,14 @@
       {
         "lessonId": "L1",
         "resources": [],
+        "passingScore": 50,
         "title": "Intro",
         "content": "Welcome..."
       },
       {
         "lessonId": "L2",
         "resources": [],
+        "passingScore": 50,
         "title": "Variables",
         "content": "Data types..."
       }
@@ -35,12 +37,14 @@
       {
         "lessonId": "L1",
         "resources": [],
+        "passingScore": 50,
         "title": "Introduction",
         "content": "Intro to Java"
       },
       {
         "lessonId": "L2",
         "resources": [],
+        "passingScore": 50,
         "title": "Variables",
         "content": "Java variables"
       }
@@ -56,6 +60,7 @@
     "lessons": [{
       "lessonId": "L1",
       "resources": [],
+      "passingScore": 50,
       "title": "OOP Concepts",
       "content": "Classes and objects"
     }]
@@ -68,8 +73,55 @@
     "instructorId": "U3",
     "status": "APPROVED",
     "lessons": [{
+      "quiz": {
+        "quizId": "7d882187-0900-404e-a914-aff8db17f43a",
+        "questions": [
+          {
+            "options": [
+              "current",
+              "b",
+              "c",
+              "d"
+            ],
+            "correctIndex": 0,
+            "questionText": "define electricity"
+          },
+          {
+            "options": [
+              "araf",
+              "b",
+              "c",
+              "d"
+            ],
+            "correctIndex": 0,
+            "questionText": "define prog"
+          },
+          {
+            "options": [
+              "zeina",
+              "adham",
+              "eman",
+              "mo"
+            ],
+            "correctIndex": 1,
+            "questionText": "meen"
+          },
+          {
+            "options": [
+              "zeina",
+              "adham",
+              "eman",
+              "mo"
+            ],
+            "correctIndex": 1,
+            "questionText": "who"
+          }
+        ],
+        "title": "quiz 1 "
+      },
       "lessonId": "L1",
       "resources": [],
+      "passingScore": 50,
       "title": "elec intro",
       "content": "dfg"
     }]
