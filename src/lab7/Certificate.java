@@ -50,5 +50,10 @@ public class Certificate {
 
         return c;
     }
+    public static Certificate generateCertificate(Student s, Course c) {
+        Certificate cert = new Certificate(s.getUserId(), c.getCourseId());
+        s.addCertificate(cert);
+        return cert;
+    }
 }
 
