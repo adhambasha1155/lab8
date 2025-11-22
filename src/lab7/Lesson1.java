@@ -42,10 +42,8 @@ public class Lesson1 {
     public void setQuiz(Quiz1 quiz) {this.quiz = quiz; }
     public int getPassingScore() {
         if (quiz != null) {
-            // Delegate the call to the Quiz object
             return quiz.getPassingScore();
         }
-        // Return 0 or a sensible default if the lesson has no quiz
         return 0; 
     }
 
