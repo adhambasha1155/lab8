@@ -2,11 +2,14 @@ import javax.swing.*;
 import Lab7.Course;
 import Lab7.InstructorManager;
 import Lab7.Lesson1;
+import Lab7.Question1;
+import Lab7.Quiz1;
 import Lab7.UserAccountManager;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import java.util.UUID;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -74,6 +77,7 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         deletelesson = new javax.swing.JToggleButton();
         back = new javax.swing.JToggleButton();
         logout = new javax.swing.JToggleButton();
+        createQuizButton = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -118,6 +122,13 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
             }
         });
 
+        createQuizButton.setText("Create Quiz");
+        createQuizButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createQuizButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,7 +141,8 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
                     .addComponent(addlesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deletelesson, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(createQuizButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -145,7 +157,9 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
                         .addComponent(addlesson)
                         .addGap(18, 18, 18)
                         .addComponent(deletelesson)
-                        .addGap(57, 57, 57)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(createQuizButton)
+                        .addGap(21, 21, 21)
                         .addComponent(back)
                         .addGap(18, 18, 18)
                         .addComponent(logout)))
@@ -267,6 +281,139 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_logoutActionPerformed
 
+    private void createQuizButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createQuizButtonActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = lessonsTable.getSelectedRow();
+    
+    // 1. Check for selected lesson
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a lesson first.", "Selection Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Retrieve the selected Lesson1 object
+    // Assuming lesson ID is in column 0
+    String lessonId = (String) lessonsTable.getModel().getValueAt(selectedRow, 0);
+    Lesson1 selectedLesson = course.getLessonById(lessonId); 
+    
+    if (selectedLesson == null) {
+        JOptionPane.showMessageDialog(this, "Selected lesson not found.", "Internal Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    // Check if a quiz already exists
+    if (selectedLesson.getQuiz() != null) {
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "A quiz already exists for this lesson. Do you want to overwrite it?", 
+            "Quiz Exists", 
+            JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+    }
+
+    // 2. Get Quiz Metadata
+    String quizTitle = JOptionPane.showInputDialog(this, "Enter the Quiz Title:", "Quiz Creation", JOptionPane.QUESTION_MESSAGE);
+    if (quizTitle == null || quizTitle.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Quiz creation cancelled or invalid title.", "Cancelled", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int passingScore = 0;
+    try {
+        String scoreStr = JOptionPane.showInputDialog(this, "Enter the Passing Score (e.g., 70):", "Quiz Creation", JOptionPane.QUESTION_MESSAGE);
+        if (scoreStr == null) return; // User cancelled
+        passingScore = Integer.parseInt(scoreStr.trim());
+        if (passingScore < 0 || passingScore > 100) {
+             JOptionPane.showMessageDialog(this, "Passing score must be between 0 and 100.", "Input Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid score entered. Please enter a whole number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int numQuestions = 0;
+    try {
+        String numStr = JOptionPane.showInputDialog(this, "Enter the Number of Questions:", "Quiz Creation", JOptionPane.QUESTION_MESSAGE);
+        if (numStr == null) return; // User cancelled
+        numQuestions = Integer.parseInt(numStr.trim());
+        if (numQuestions <= 0) {
+             JOptionPane.showMessageDialog(this, "Number of questions must be greater than zero.", "Input Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid number entered. Please enter a whole number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+    
+    List<Question1> questions = new ArrayList<>();
+    
+    // 3. Loop to gather all questions
+    for (int i = 1; i <= numQuestions; i++) {
+        String questionText = JOptionPane.showInputDialog(this, "Question " + i + ": Enter the question text:", "Question Details", JOptionPane.QUESTION_MESSAGE);
+        if (questionText == null || questionText.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Question " + i + " creation cancelled. Quiz creation aborted.", "Cancelled", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        List<String> options = new ArrayList<>();
+        // Gather 4 choices/options
+        for (int j = 1; j <= 4; j++) {
+            String option = JOptionPane.showInputDialog(this, 
+                "Question " + i + ": Enter Choice " + j + ":", 
+                "Question Details", 
+                JOptionPane.QUESTION_MESSAGE);
+            if (option == null) {
+                JOptionPane.showMessageDialog(this, "Option entry cancelled. Quiz creation aborted.", "Cancelled", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            options.add(option);
+        }
+
+        int correctIndex = -1; // 0-based index
+        try {
+            String correctStr = JOptionPane.showInputDialog(this, 
+                "Question " + i + ": Enter the CORRECT Choice number (1, 2, 3, or 4):", 
+                "Question Details", 
+                JOptionPane.QUESTION_MESSAGE);
+            if (correctStr == null) {
+                JOptionPane.showMessageDialog(this, "Correct answer entry cancelled. Quiz creation aborted.", "Cancelled", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int choiceNumber = Integer.parseInt(correctStr.trim());
+            if (choiceNumber < 1 || choiceNumber > 4) {
+                 JOptionPane.showMessageDialog(this, "Correct choice must be 1, 2, 3, or 4.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                 return;
+            }
+            correctIndex = choiceNumber - 1; 
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid choice number. Please enter 1, 2, 3, or 4.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Create and add the Question1 object
+        Question1 newQuestion = new Question1(questionText, options, correctIndex);
+        questions.add(newQuestion);
+    }
+    
+    // 4. Create Quiz1 object
+    String quizId = UUID.randomUUID().toString();
+    Quiz1 newQuiz = new Quiz1(quizId, quizTitle, passingScore);
+    for(Question1 q : questions) {
+        newQuiz.addQuestion(q);
+    }
+
+    // 5. Attach quiz to lesson and save
+    boolean success = instructorManager.setLessonQuiz(course, selectedLesson, newQuiz);
+    
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Quiz '" + quizTitle + "' created and attached to lesson: " + selectedLesson.getTitle(), "Success", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to save the quiz. Please check backend logic.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_createQuizButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -275,6 +422,7 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton addlesson;
     private javax.swing.JToggleButton back;
+    private javax.swing.JToggleButton createQuizButton;
     private javax.swing.JToggleButton deletelesson;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable lessonsTable;
