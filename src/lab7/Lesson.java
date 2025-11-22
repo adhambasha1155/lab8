@@ -53,7 +53,7 @@ public class Lesson {
         return obj;
     }
 
-    quiz getquiz() {
+    Quiz getquiz() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

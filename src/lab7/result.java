@@ -2,23 +2,24 @@ package Lab7;
 
 import java.util.ArrayList;
 import java.util.List;
+import lab7.Attempt;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class result {
+public class Result {
     private String studentId;       // ID of the student
     private String lessonId;        // ID of the lesson/quiz
     private int maxRetries;         // Max allowed retries
     private List<Attempt> attempts; // Stores each attempt
 
-    public result(String studentId, String lessonId, int maxRetries) {
+    public Result(String studentId, String lessonId, int maxRetries) {
         this.studentId = studentId;
         this.lessonId = lessonId;
         this.maxRetries = maxRetries;
         this.attempts = new ArrayList<>();
     }
 
-    public result() {
+    public Result() {
         this.attempts = new ArrayList<>();
     }
 
@@ -68,25 +69,9 @@ public class result {
         return obj;
     }
 
-    // Inner class for a single attempt
-    public static class Attempt {
-        private int score;
 
-        public Attempt(int score) {
-            this.score = score;
-        }
-
-        public int getScore() { return score; }
-        public void setScore(int score) { this.score = score; }
-
-        public JSONObject toJson() {
-            JSONObject obj = new JSONObject();
-            obj.put("score", score);
-            return obj;
-        }
-    }
     public boolean isLessonCompleted(Lesson lesson) {
-    quiz q = lesson.getquiz();
+    Quiz q = lesson.getquiz();
     if (q == null) return false;
 
     int highestScore = getHighestScore();
