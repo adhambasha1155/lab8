@@ -8,6 +8,8 @@ package lab7;
  *
  * @author Eman
  */
+import Lab7.Course;
+import Lab7.Student;
 import java.time.LocalDate;
 import java.util.UUID;
 import org.json.JSONObject;
