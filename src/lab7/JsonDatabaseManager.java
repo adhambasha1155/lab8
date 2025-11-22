@@ -53,31 +53,25 @@ public class JsonDatabaseManager {
     }
 
     /**
-     * Helper method to parse a Result object from JSON.
+     * Helper method to parse a Result1 object from JSON.
      */
-    private Result loadResultFromJson(JSONObject resultObj) {
-        Result result = new Result(
-                resultObj.getString("studentId"),
-                resultObj.getString("lessonId"),
-                resultObj.getInt("maxRetries")
+    public Result1 loadResultFromJson(JSONObject rObj) {
+        Result1 result = new Result1(
+                rObj.getString("studentId"),
+                rObj.getString("lessonId"),
+                rObj.getInt("maxRetries")
         );
 
-        JSONArray attemptsArr = resultObj.optJSONArray("attempts");
-        if (attemptsArr != null) {
-            for (int k = 0; k < attemptsArr.length(); k++) {
-                JSONObject attemptObj = attemptsArr.getJSONObject(k);
-                int score = attemptObj.getInt("score");
-                // The inner class Result.Attempt should have a constructor that takes the JSONObject
-                result.addAttempt(score) ;
-                //result.getAttempts().add(new Result().addAttempt(score)); 
-            }
-
+        JSONArray attemptsArr = rObj.getJSONArray("attempts");
+        for (int k = 0; k < attemptsArr.length(); k++) {
+            JSONObject attemptObj = attemptsArr.getJSONObject(k);
+            int score = attemptObj.getInt("score");
+            // FIX: Use the new unconditional loadAttempt() method
+            result.loadAttempt(score); 
         }
-            return result;
+        return result;
     }
-        // =========================================================================================
-        // LOAD USERS (UPDATED TO LOAD QUIZ RESULTS FOR STUDENTS)
-        // =========================================================================================
+     
     public List<User> loadUsers() {
         List<User> users = new ArrayList<>();
 
@@ -145,7 +139,7 @@ public class JsonDatabaseManager {
                     if (resultsArr != null) {
                         for (int j = 0; j < resultsArr.length(); j++) {
                             JSONObject resultObj = resultsArr.getJSONObject(j);
-                            Result result = loadResultFromJson(resultObj);
+                            Result1 result = loadResultFromJson(resultObj);
                             student.getQuizResults().add(result);
                         }
                     }
@@ -180,9 +174,6 @@ public class JsonDatabaseManager {
         return users;
     }
 
-    // =========================================================================================
-    // LOAD COURSES (UPDATED TO LOAD QUIZ FOR LESSONS)
-    // =========================================================================================
     public List<Course> loadCourses() {
         List<Course> courses = new ArrayList<>();
 
@@ -274,9 +265,7 @@ public class JsonDatabaseManager {
         return courses;
     }
 
-    // =========================================================================================
-    // SAVE USERS (No change needed, relies on updated toJson() method in User/Student)
-    // =========================================================================================
+   
     public void saveUsers(List<User> users) {
         try {
             JSONArray arr = new JSONArray();
@@ -294,9 +283,6 @@ public class JsonDatabaseManager {
         }
     }
 
-    // =========================================================================================
-    // SAVE COURSES (No change needed, relies on updated toJson() method in Course/Lesson)
-    // =========================================================================================
     public void saveCourses(List<Course> courses) {
         try {
             JSONArray arr = new JSONArray();
