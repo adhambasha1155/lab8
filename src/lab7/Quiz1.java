@@ -5,24 +5,24 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Quiz {
+public class Quiz1 {
 
     private String quizId;
     private String title;
-    private List<Question> questions;
+    private List<Question1> questions;
 
-    public Quiz(String quizId, String title) {
+    public Quiz1(String quizId, String title) {
         this.quizId = quizId;
         this.title = title;
         this.questions = new ArrayList<>();
     }
 
-    public Quiz() {
+    public Quiz1() {
         this.questions = new ArrayList<>();
     }
 
     // Add a question
-    public void addQuestion(Question question) {
+    public void addQuestion(Question1 question) {
         questions.add(question);
     }
 
@@ -35,7 +35,7 @@ public class Quiz {
         return title;
     }
 
-    public List<Question> getQuestions() {
+    public List<Question1> getQuestions() {
         return questions;
     }
 
@@ -46,7 +46,7 @@ public class Quiz {
         obj.put("title", title);
 
         JSONArray arr = new JSONArray();
-        for (Question q : questions) {
+        for (Question1 q : questions) {
             arr.put(q.toJson());
         }
         obj.put("questions", arr);

@@ -1,7 +1,7 @@
 import javax.swing.*;
 import Lab7.Course;
 import Lab7.InstructorManager;
-import Lab7.Lesson;
+import Lab7.Lesson1;
 import Lab7.UserAccountManager;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -41,10 +41,10 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         tableModel.setRowCount(0); // Clear existing rows
 
         // Check if getLessons() exists and returns a List<Lesson>
-        List<Lesson> lessons = course.getLessons(); 
+        List<Lesson1> lessons = course.getLessons(); 
         
         if (lessons != null) {
-            for (Lesson lesson : lessons) {
+            for (Lesson1 lesson : lessons) {
                 // Truncate content for a cleaner table view
                 String content = lesson.getContent();
                 String truncatedContent = content.length() > 80 ? content.substring(0, 77) + "..." : content;
@@ -178,7 +178,7 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         content = content.trim();
         
         // 4. Call Manager to create and save the lesson
-        Lesson newLesson = instructorManager.createLesson(
+        Lesson1 newLesson = instructorManager.createLesson(
             course, 
             lessonId, 
             title, 
@@ -206,7 +206,7 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         String lessonTitle = (String) lessonsTable.getModel().getValueAt(selectedRow, 1);
         
         // 3. Retrieve the Lesson object from the Course
-        Lesson lessonToDelete = course.getLessonById(lessonId);
+        Lesson1 lessonToDelete = course.getLessonById(lessonId);
 
         if (lessonToDelete == null) {
             // Should not happen if data is loaded correctly, but safe to check

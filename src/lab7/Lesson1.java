@@ -5,20 +5,22 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Lesson {
+public class Lesson1 {
     private String lessonId;
     private String title;
     private String content;
     private List<String> resources;
+    private Quiz1 quiz;
 
-    public Lesson(String lessonId, String title, String content) {
+    public Lesson1(String lessonId, String title, String content) {
         this.lessonId = lessonId;
         this.title = title;
         this.content = content;
         this.resources = new ArrayList<>();
+        this.quiz = null;
     }
 
-    public Lesson() {
+    public Lesson1() {
     }
 
     public void setLessonId(String lessonId) {
@@ -36,6 +38,8 @@ public class Lesson {
     public void setResources(List<String> resources) {
         this.resources = resources;
     }
+    public Quiz1 getQuiz() { return quiz;}
+    public void setQuiz(Quiz1 quiz) {this.quiz = quiz; }
 
     public void addResource(String resource) { resources.add(resource); }
 
@@ -50,10 +54,13 @@ public class Lesson {
         obj.put("title", title);
         obj.put("content", content);
         obj.put("resources", new JSONArray(resources));
+        if(quiz != null){
+            obj.put("quiz",quiz.toJson());
+        }
         return obj;
     }
 
-    Quiz getquiz() {
+    Quiz1 getquiz() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

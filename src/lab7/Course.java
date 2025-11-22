@@ -10,7 +10,7 @@ public class Course
     private String title;
     private String description;
     private String instructorId;
-    private List<Lesson> lessons;
+    private List<Lesson1> lessons;
     private List<String> students; // List of enrolled student IDs
     private ApprovalStatus status;
 
@@ -41,7 +41,7 @@ public class Course
         this.instructorId = instructorId;
     }
 
-    public void setLessons(List<Lesson> lessons) {
+    public void setLessons(List<Lesson1> lessons) {
         this.lessons = lessons;
     }
 
@@ -54,17 +54,17 @@ public class Course
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public String getInstructorId() { return instructorId; }
-    public List<Lesson> getLessons() { return lessons; }
+    public List<Lesson1> getLessons() { return lessons; }
     public List<String> getStudents() { return students; }
     public ApprovalStatus getStatus() { return status; }
     public void setStatus(ApprovalStatus status) { this.status = status;}
 
-    public void addLesson(Lesson lesson) { lessons.add(lesson); }
+    public void addLesson(Lesson1 lesson) { lessons.add(lesson); }
     public void enrollStudent(String studentId) { students.add(studentId); }
     
-    public Lesson getLessonById(String lessonId)
+    public Lesson1 getLessonById(String lessonId)
     {
-    for (Lesson lesson : lessons)
+    for (Lesson1 lesson : lessons)
     {
         if (lesson.getLessonId().equals(lessonId))
         {
@@ -83,7 +83,7 @@ public class Course
         obj.put("instructorId", instructorId);
         obj.put("status", status.name());
         JSONArray lessonArray = new JSONArray();
-        for (Lesson lesson : lessons) {
+        for (Lesson1 lesson : lessons) {
             lessonArray.put(lesson.toJson());
         }
         obj.put("lessons", lessonArray);
