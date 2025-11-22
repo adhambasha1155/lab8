@@ -40,6 +40,14 @@ public class Lesson1 {
     }
     public Quiz1 getQuiz() { return quiz;}
     public void setQuiz(Quiz1 quiz) {this.quiz = quiz; }
+    public int getPassingScore() {
+        if (quiz != null) {
+            // Delegate the call to the Quiz object
+            return quiz.getPassingScore();
+        }
+        // Return 0 or a sensible default if the lesson has no quiz
+        return 0; 
+    }
 
     public void addResource(String resource) { resources.add(resource); }
 
@@ -60,11 +68,4 @@ public class Lesson1 {
         return obj;
     }
 
-    Quiz1 getquiz() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    int getPassingScore() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

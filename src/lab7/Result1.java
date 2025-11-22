@@ -2,34 +2,38 @@ package Lab7;
 
 import java.util.ArrayList;
 import java.util.List;
-import lab7.Attempt;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Result {
+public class Result1 {
     private String studentId;       // ID of the student
     private String lessonId;        // ID of the lesson/quiz
     private int maxRetries;         // Max allowed retries
     private List<Attempt> attempts; // Stores each attempt
 
-    public Result(String studentId, String lessonId, int maxRetries) {
+    public Result1(String studentId, String lessonId, int maxRetries) {
         this.studentId = studentId;
         this.lessonId = lessonId;
         this.maxRetries = maxRetries;
         this.attempts = new ArrayList<>();
     }
 
-    public Result() {
+    public Result1() {
         this.attempts = new ArrayList<>();
     }
 
     // Add an attempt
-    public  void addAttempt(int score) {
-        if (attempts.size() < maxRetries) {
-            attempts.add(new Attempt(score));
-        } else {
-            System.out.println("Max retries reached for this student.");
-        }
+    public void addAttempt(int score) {
+    if (attempts.size() < maxRetries) {
+        attempts.add(new Attempt(score));
+    } else {
+        System.out.println("Max retries reached for this student.");
+    }
+    }
+
+      // NEW method for loading from JSON (unconditional)
+    public void loadAttempt(int score) {
+    attempts.add(new Attempt(score)); 
     }
 
     // Getters and setters
@@ -74,7 +78,7 @@ public class Result {
 
 
     public boolean isLessonCompleted(Lesson1 lesson) {
-    Quiz1 q = lesson.getquiz();
+    Quiz1 q = lesson.getQuiz();
     if (q == null) return false;
 
     int highestScore = getHighestScore();

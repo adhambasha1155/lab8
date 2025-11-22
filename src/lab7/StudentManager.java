@@ -71,7 +71,7 @@ public class StudentManager {
         return new ArrayList<>();
     }
 
-   public Result submitQuiz(Student student, String courseId, String lessonId, List<Integer> studentAnswers) {
+   public Result1 submitQuiz(Student student, String courseId, String lessonId, List<Integer> studentAnswers) {
         Course course = getCourseById(courseId);
         if (course == null) return null;
 
@@ -79,12 +79,12 @@ public class StudentManager {
         Quiz1 quiz = (lesson != null) ? lesson.getQuiz() : null;
         if (quiz == null) return null; // No quiz found for this lesson
 
-        // Find or create the Result object for this student and lesson
-        Result result = student.getResultForLesson(lessonId);
+        // Find or create the Result1 object for this student and lesson
+        Result1 result = student.getResultForLesson(lessonId);
         int maxRetries = 3; // Default max retries (e.g.)
 
         if (result == null) {
-            result = new Result(student.getUserId(), lessonId, maxRetries);
+            result = new Result1(student.getUserId(), lessonId, maxRetries);
             student.getQuizResults().add(result);
         } else if (result.hasReachedMaxRetries()) {
             return null; // Cannot submit, max retries reached
@@ -117,7 +117,7 @@ public class StudentManager {
 
         // --- NEW QUIZ CHECK LOGIC ---
         if (lesson.getQuiz() != null) {
-            Result result = student.getResultForLesson(lessonId);
+            Result1 result = student.getResultForLesson(lessonId);
             
             // Check if student has taken the quiz and scored over 50
             if (result == null || result.getHighestScore() < 50) {
