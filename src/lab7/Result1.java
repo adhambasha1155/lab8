@@ -5,30 +5,35 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class result {
+public class Result1 {
     private String studentId;       // ID of the student
     private String lessonId;        // ID of the lesson/quiz
     private int maxRetries;         // Max allowed retries
     private List<Attempt> attempts; // Stores each attempt
 
-    public result(String studentId, String lessonId, int maxRetries) {
+    public Result1(String studentId, String lessonId, int maxRetries) {
         this.studentId = studentId;
         this.lessonId = lessonId;
         this.maxRetries = maxRetries;
         this.attempts = new ArrayList<>();
     }
 
-    public result() {
+    public Result1() {
         this.attempts = new ArrayList<>();
     }
 
     // Add an attempt
     public void addAttempt(int score) {
-        if (attempts.size() < maxRetries) {
-            attempts.add(new Attempt(score));
-        } else {
-            System.out.println("Max retries reached for this student.");
-        }
+    if (attempts.size() < maxRetries) {
+        attempts.add(new Attempt(score));
+    } else {
+        System.out.println("Max retries reached for this student.");
+    }
+    }
+
+      // NEW method for loading from JSON (unconditional)
+    public void loadAttempt(int score) {
+    attempts.add(new Attempt(score)); 
     }
 
     // Getters and setters
@@ -51,6 +56,9 @@ public class result {
         }
         return max;
     }
+    public boolean hasReachedMaxRetries() {
+        return attempts.size() >= maxRetries;
+    }
 
     // Convert to JSON
     public JSONObject toJson() {
@@ -68,25 +76,9 @@ public class result {
         return obj;
     }
 
-    // Inner class for a single attempt
-    public static class Attempt {
-        private int score;
 
-        public Attempt(int score) {
-            this.score = score;
-        }
-
-        public int getScore() { return score; }
-        public void setScore(int score) { this.score = score; }
-
-        public JSONObject toJson() {
-            JSONObject obj = new JSONObject();
-            obj.put("score", score);
-            return obj;
-        }
-    }
-    public boolean isLessonCompleted(Lesson lesson) {
-    quiz q = lesson.getquiz();
+    public boolean isLessonCompleted(Lesson1 lesson) {
+    Quiz1 q = lesson.getQuiz();
     if (q == null) return false;
 
     int highestScore = getHighestScore();

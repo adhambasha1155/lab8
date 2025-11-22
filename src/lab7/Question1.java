@@ -4,20 +4,29 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class question {
+public class Question1 {
+
     private String questionText;
     private List<String> options;
     private int correctIndex;
 
-    public question(String questionText, List<String> options, int correctIndex) {
+    public Question1(String questionText, List<String> options, int correctIndex) {
         this.questionText = questionText;
         this.options = options;
         this.correctIndex = correctIndex;
     }
 
-    public String getQuestionText() { return questionText; }
-    public List<String> getOptions() { return options; }
-    public int getCorrectIndex() { return correctIndex; }
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public int getCorrectIndex() {
+        return correctIndex;
+    }
 
     public JSONObject toJson() {
         JSONObject obj = new JSONObject();

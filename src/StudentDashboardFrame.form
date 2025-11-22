@@ -28,10 +28,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="browseCoursesButton" min="-2" pref="132" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="enrolledCoursesButton1" max="32767" attributes="0"/>
-                  <Component id="enrolledCoursesButton" max="32767" attributes="0"/>
-              </Group>
+              <Component id="enrolledCoursesButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="63" max="32767" attributes="0"/>
               <Component id="viewLessonsButton" min="-2" pref="132" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
@@ -50,9 +47,7 @@
                   <Component id="viewLessonsButton" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
                   <Component id="logoutButton" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="enrolledCoursesButton1" min="-2" pref="63" max="-2" attributes="0"/>
-              <EmptySpace pref="150" max="32767" attributes="0"/>
+              <EmptySpace pref="231" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -93,14 +88,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browseCoursesActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="enrolledCoursesButton1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="quiz"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enrolledCoursesButton1enrolledCoursesActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

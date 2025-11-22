@@ -12,6 +12,16 @@ public class InstructorManager {
         jsonDB = new JsonDatabaseManager();       // initialize JSON manager
         courses = jsonDB.loadCourses();           // load existing courses from courses.json
     }
+    public boolean setLessonQuiz(Course course, Lesson1 lesson, Quiz1 quiz) {
+        if (course == null || lesson == null || quiz == null) return false;
+        
+        lesson.setQuiz(quiz); 
+
+        // Save changes to JSON (Quiz is now part of the Course structure)
+        jsonDB.saveCourses(courses);
+
+        return true;
+    }
 
     // ===================== Create Course =====================
    public Course createCourse(Instructor instructor, String courseId, String title, String description) {
@@ -19,6 +29,7 @@ public class InstructorManager {
     if (getCourseById(courseId) != null) {
         return null;
     }
+    
 
    
     Course course = new Course(courseId, title, description, instructor.getUserId());
@@ -58,10 +69,10 @@ public class InstructorManager {
     }
 
     // ===================== Add Lesson =====================
-    public Lesson addLessonToCourse(Course course, String lessonTitle, String content) {
+    public Lesson1 addLessonToCourse(Course course, String lessonTitle, String content) {
         if (course == null) return null;
         String lessonId = "L" + (course.getLessons().size() + 1);
-        Lesson lesson = new Lesson(lessonId, lessonTitle, content);
+        Lesson1 lesson = new Lesson1(lessonId, lessonTitle, content);
         course.addLesson(lesson);
 
         // Save changes to JSON
@@ -69,11 +80,11 @@ public class InstructorManager {
 
         return lesson;
     }
-    public Lesson createLesson(Course course, String lessonId, String lessonTitle, String content) {
+    public Lesson1 createLesson(Course course, String lessonId, String lessonTitle, String content) {
         if (course == null) return null;
         
         // 1. Create Lesson using the user-provided lessonId
-        Lesson lesson = new Lesson(lessonId, lessonTitle, content);
+        Lesson1 lesson = new Lesson1(lessonId, lessonTitle, content);
         
         // 2. Add the lesson to the course's internal list
         course.addLesson(lesson);
@@ -85,7 +96,7 @@ public class InstructorManager {
     }
 
     // ===================== Edit Lesson =====================
-    public boolean editLesson(Lesson lesson, String newTitle, String newContent) {
+    public boolean editLesson(Lesson1 lesson, String newTitle, String newContent) {
         if (lesson == null) return false;
         lesson.setTitle(newTitle);
         lesson.setContent(newContent);
@@ -97,7 +108,7 @@ public class InstructorManager {
     }
 
     // ===================== Delete Lesson =====================
-    public boolean deleteLesson(Course course, Lesson lesson) {
+    public boolean deleteLesson(Course course, Lesson1 lesson) {
         if (course == null || lesson == null) return false;
         boolean removed = course.getLessons().remove(lesson);
 

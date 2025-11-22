@@ -10,12 +10,26 @@ public class Student extends User
 {
     private List<String> enrolledCourses;
     private List<String> progress; // store as "courseId:lessonId"
+    private List<Result1> quizResults;
     
     public Student(String userId, String username, String email, String passwordHash)
     {
         super(userId, username, email, passwordHash, "Student");
         enrolledCourses = new ArrayList<>();
         progress = new ArrayList<>();
+        quizResults = new ArrayList<>();
+    }
+    public List<Result1> getQuizResults() { return quizResults; }
+    public void setQuizResults(List<Result1> quizResults) { this.quizResults = quizResults; }
+    
+    // NEW: Get result object for a specific lesson
+    public Result1 getResultForLesson(String lessonId) {
+        for (Result1 r : quizResults) {
+            if (r.getLessonId().equals(lessonId)) {
+                return r;
+            }
+        }
+        return null;
     }
 
     public List<String> getEnrolledCourses() { return enrolledCourses; }
@@ -60,6 +74,11 @@ public class Student extends User
         obj.put("role", getRole());
         obj.put("enrolledCourses", new JSONArray(enrolledCourses));
         obj.put("progress", new JSONArray(progress));
+        JSONArray resultsArray = new JSONArray();
+        for (Result1 r : quizResults) {
+            resultsArray.put(r.toJson());
+        }
+        obj.put("quizResults", resultsArray);
         return obj;
     }
 }
