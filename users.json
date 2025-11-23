@@ -30,13 +30,21 @@
   {
     "role": "Student",
     "enrolledCourses": ["978"],
-    "progress": [],
-    "quizResults": [{
-      "studentId": "U4",
-      "maxRetries": 3,
-      "lessonId": "L1",
-      "attempts": [{"score": 75}]
-    }],
+    "progress": ["978:L2"],
+    "quizResults": [
+      {
+        "studentId": "U4",
+        "maxRetries": 3,
+        "lessonId": "L1",
+        "attempts": [{"score": 75}]
+      },
+      {
+        "studentId": "U4",
+        "maxRetries": 3,
+        "lessonId": "L2",
+        "attempts": [{"score": 66}]
+      }
+    ],
     "userId": "U4",
     "email": "ss@ss",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
@@ -48,5 +56,15 @@
     "email": "ad@ad",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
     "username": "admin1"
+  },
+  {
+    "role": "Student",
+    "enrolledCourses": ["978"],
+    "progress": [],
+    "quizResults": [],
+    "userId": "U6",
+    "email": "adham@a",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "adhamtest"
   }
 ]
