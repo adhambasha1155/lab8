@@ -1,6 +1,7 @@
 [
   {
     "role": "Student",
+    "certificates": [],
     "enrolledCourses": [],
     "progress": [],
     "quizResults": [],
@@ -11,6 +12,7 @@
   },
   {
     "role": "Student",
+    "certificates": [],
     "enrolledCourses": [],
     "progress": [],
     "quizResults": [],
@@ -21,7 +23,11 @@
   },
   {
     "role": "Instructor",
-    "createdCourses": ["978"],
+    "createdCourses": [
+      "978",
+      "C5",
+      "C7"
+    ],
     "userId": "U3",
     "email": "a@a",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
@@ -29,14 +35,21 @@
   },
   {
     "role": "Student",
+    "certificates": [],
     "enrolledCourses": ["978"],
-    "progress": ["978:L2"],
+    "progress": [
+      "978:L2",
+      "978:L1"
+    ],
     "quizResults": [
       {
         "studentId": "U4",
         "maxRetries": 3,
         "lessonId": "L1",
-        "attempts": [{"score": 75}]
+        "attempts": [
+          {"score": 75},
+          {"score": 75}
+        ]
       },
       {
         "studentId": "U4",
@@ -59,6 +72,7 @@
   },
   {
     "role": "Student",
+    "certificates": [],
     "enrolledCourses": ["978"],
     "progress": [],
     "quizResults": [],
@@ -66,5 +80,53 @@
     "email": "adham@a",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
     "username": "adhamtest"
+  },
+  {
+    "role": "Instructor",
+    "createdCourses": [],
+    "userId": "U7",
+    "email": "eman@a",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "adham11"
+  },
+  {
+    "role": "Student",
+    "certificates": [{
+      "studentId": "U8",
+      "certificateId": "c4af9fa9-d817-4bf0-807a-170fc9310723",
+      "issueDate": "2025-11-23",
+      "courseId": "C7"
+    }],
+    "enrolledCourses": [
+      "C5",
+      "978",
+      "C7"
+    ],
+    "progress": [
+      "C5:L1",
+      "C7:L1",
+      "C7:L2"
+    ],
+    "quizResults": [
+      {
+        "studentId": "U8",
+        "maxRetries": 3,
+        "lessonId": "L1",
+        "attempts": [
+          {"score": 100},
+          {"score": 100}
+        ]
+      },
+      {
+        "studentId": "U8",
+        "maxRetries": 3,
+        "lessonId": "L2",
+        "attempts": [{"score": 100}]
+      }
+    ],
+    "userId": "U8",
+    "email": "adham@231",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "adhambasha"
   }
 ]

@@ -233,17 +233,22 @@ public class LessonsFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void takeQuizbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_takeQuizbuttonActionPerformed
-        // TODO add your handling code here:
-        int selectedRow = LessonsTable.getSelectedRow();
+    // 1. Get selected lesson ID
+    int selectedRow = LessonsTable.getSelectedRow();
     if (selectedRow == -1) {
         JOptionPane.showMessageDialog(this, "Please select a lesson to take the quiz.", "Selection Error", JOptionPane.WARNING_MESSAGE);
         return;
     }
-    String lessonId = (String) model.getValueAt(selectedRow, 0);
+    String lessonId = (String) model.getValueAt(selectedRow, 0); 
 
-    // 2. Find Course and Lesson
+    // 2. Find Course and Lesson 
     Course course = accountManager.getCourseById(courseId);
-    Lesson1 lesson = course.getLessonById(lessonId);
+    Lesson1 lesson = course.getLessonById(lessonId); 
+
+    if (lesson == null || course == null) {
+        JOptionPane.showMessageDialog(this, "Lesson or Course data is missing.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
     // 3. Check for Quiz Availability
     Quiz1 quiz = lesson.getQuiz();
@@ -254,25 +259,49 @@ public class LessonsFrame extends javax.swing.JFrame {
         return;
     }
 
-    // 4. Check for Max Retries (If you want to enforce retries here)
+    // 4. Perform Checks ONLY for Students
     if (currentUser instanceof Student) {
         Student student = (Student) currentUser;
-        Result1 result = student.getResultForLesson(lessonId);
+        
+        List<Lesson1> allLessons = course.getLessons(); 
+        int currentLessonIndex = allLessons.indexOf(lesson);
 
-        // Assuming a max retries of 3 is enforced via Result1 object
-        if (result != null && result.hasReachedMaxRetries()) {
-             JOptionPane.showMessageDialog(this, "You have reached the maximum number of retries for this quiz.", 
-                 "Max Retries Reached", JOptionPane.ERROR_MESSAGE);
-             return;
+        // Iterate through all lessons from the start up to the current lesson (exclusive)
+        for (int i = 0; i < currentLessonIndex; i++) {
+            Lesson1 precedingLesson = allLessons.get(i);
+            
+            // Check only if the preceding lesson actually has a quiz
+            if (precedingLesson.getQuiz() != null) {
+                
+                // *** UPDATED CHECK: Use isLessonCompleted ***
+                // This method must return true only if the student passed the quiz.
+                boolean isPrecedingCompleted = student.isLessonCompleted(courseId, precedingLesson.getLessonId());
+                
+                if (!isPrecedingCompleted) {
+                    JOptionPane.showMessageDialog(this, 
+                        "You must complete (pass the quiz for) Lesson: '" + precedingLesson.getTitle() + "' before proceeding.", 
+                        "Completion Required", JOptionPane.WARNING_MESSAGE);
+                    return; // Block the student and exit
+                }
+            }
         }
 
-        // 5. Launch the QuizFrame
+        Result1 result = student.getResultForLesson(lessonId);
+
+        if (result != null && result.hasReachedMaxRetries()) {
+            JOptionPane.showMessageDialog(this, "You have reached the maximum number of retries for this quiz.", 
+                    "Max Retries Reached", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 6. Launch the QuizFrame
         QuizFrame quizFrame = new QuizFrame(accountManager, student, courseId, lesson);
         quizFrame.setVisible(true);
         // Do NOT dispose LessonsFrame, let the user keep the lesson view open
     } else {
-         JOptionPane.showMessageDialog(this, "Only students can take quizzes.", "Access Denied", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Only students can take quizzes.", "Access Denied", JOptionPane.ERROR_MESSAGE);
     }
+
     }//GEN-LAST:event_takeQuizbuttonActionPerformed
 
     /**

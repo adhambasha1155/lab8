@@ -3,13 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/lab7/Course.java</file>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/lab7/Student.java</file>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/InstructorDashboardFrame.java</file>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/AdminDashboardFrame.java</file>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/SignupFrame.java</file>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/chart.java</file>
-            <file>file:/C:/Users/Dell/Documents/NetBeansProjects/lab8/src/lab7/StudentManager.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/ApprovalStatus.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/AdminManager.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/coursepreformance.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/LoginFrame.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/ManageLessonsFrame.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/StudentDashboardFrame.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/InstructorDashboardFrame.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/Course.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/SignupFrame.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/Certificate.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/chart.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/lessonstats.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/Instructor.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/lab7/InstructorManager.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/managecourses.java</file>
+            <file>file:/C:/Users/adham/prog2/lab8/src/QuizFrame.java</file>
         </group>
     </open-files>
 </project-private>
