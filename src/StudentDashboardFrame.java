@@ -62,6 +62,7 @@ private void loadCertificates() {
         jScrollPane1 = new javax.swing.JScrollPane();
         certificateTable = new javax.swing.JTable();
         downloadButton = new javax.swing.JButton();
+        viewButton = new javax.swing.JButton();
 
         welcomeLabel.setText("Welcome, Student");
 
@@ -126,9 +127,20 @@ private void loadCertificates() {
         downloadButton.setBackground(new java.awt.Color(0, 204, 51));
         downloadButton.setText("Download");
         downloadButton.setActionCommand("");
+        downloadButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         downloadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 downloadButtonActionPerformed(evt);
+            }
+        });
+
+        viewButton.setBackground(new java.awt.Color(204, 204, 0));
+        viewButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        viewButton.setText("view");
+        viewButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        viewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewButtonActionPerformed(evt);
             }
         });
 
@@ -145,8 +157,10 @@ private void loadCertificates() {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(307, 307, 307)
-                        .addComponent(downloadButton)))
+                        .addGap(124, 124, 124)
+                        .addComponent(downloadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(129, 129, 129)
+                        .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -156,7 +170,9 @@ private void loadCertificates() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(downloadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(downloadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(viewButton, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
                 .addGap(0, 48, Short.MAX_VALUE))
         );
 
@@ -231,6 +247,10 @@ private void loadCertificates() {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         loadCertificates();
     }//GEN-LAST:event_formWindowOpened
+
+    private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
+        
+    }//GEN-LAST:event_viewButtonActionPerformed
     
     
     
@@ -244,6 +264,7 @@ private void loadCertificates() {
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.Label label1;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JButton viewButton;
     private javax.swing.JButton viewLessonsButton;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
