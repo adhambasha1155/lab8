@@ -67,7 +67,10 @@
   },
   {
     "description": "electronics course",
-    "students": ["U6"],
+    "students": [
+      "U6",
+      "U8"
+    ],
     "title": "electronics",
     "courseId": "978",
     "instructorId": "U3",
@@ -168,6 +171,99 @@
         "passingScore": 50,
         "title": "elec 1",
         "content": "current"
+      }
+    ]
+  },
+  {
+    "description": "maths course",
+    "students": [],
+    "title": "Differential",
+    "courseId": "C5",
+    "instructorId": "U3",
+    "status": "APPROVED",
+    "lessons": [{
+      "quiz": {
+        "quizId": "98fe3042-e6d6-41ee-828e-2122bbda577d",
+        "questions": [
+          {
+            "options": [
+              "correct",
+              "",
+              "b",
+              "d"
+            ],
+            "correctIndex": 0,
+            "questionText": "types of integeration"
+          },
+          {
+            "options": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "correctIndex": 0,
+            "questionText": "define"
+          }
+        ],
+        "title": "quiz 1"
+      },
+      "lessonId": "L1",
+      "resources": [],
+      "passingScore": 50,
+      "title": "integration",
+      "content": "types"
+    }]
+  },
+  {
+    "description": "testing",
+    "students": [],
+    "title": "test",
+    "courseId": "C7",
+    "instructorId": "U3",
+    "status": "APPROVED",
+    "lessons": [
+      {
+        "quiz": {
+          "quizId": "7d3c6776-0be8-43fb-b795-fcd9a1ba019c",
+          "questions": [{
+            "options": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "correctIndex": 0,
+            "questionText": "define"
+          }],
+          "title": "quiz1"
+        },
+        "lessonId": "L1",
+        "resources": [],
+        "passingScore": 50,
+        "title": "lesson1",
+        "content": "test1"
+      },
+      {
+        "quiz": {
+          "quizId": "89952b83-f419-4d51-ad24-d3db90e2128d",
+          "questions": [{
+            "options": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "correctIndex": 0,
+            "questionText": "define"
+          }],
+          "title": "quiz2"
+        },
+        "lessonId": "L2",
+        "resources": [],
+        "passingScore": 50,
+        "title": "lesson2",
+        "content": "test2"
       }
     ]
   }
