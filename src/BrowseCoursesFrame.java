@@ -1,3 +1,4 @@
+
 import Lab7.Course;
 import Lab7.Instructor;
 import Lab7.JsonDatabaseManager;
@@ -14,7 +15,6 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
     private DefaultTableModel model;
     private UserAccountManager accountManager;
 
-    
     public BrowseCoursesFrame(UserAccountManager accountManager, User currentUser) {
         this.accountManager = accountManager;
         this.currentUser = currentUser;
@@ -32,16 +32,16 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
 
         loadCourses(); // load courses from UserAccountManager
     }
-    
-    
-    
+
     // ---------------------------
     // LOAD COURSES INTO TABLE
     private void loadCourses() {
         model.setRowCount(0); // clear table
 
         List<Course> courses = accountManager.getAllCourses();
-        if (courses == null) return;
+        if (courses == null) {
+            return;
+        }
 
         for (Course c : courses) {
             String instructorName = getInstructorName(c.getInstructorId());
@@ -55,7 +55,6 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
         }
     }
 
-    
     // GET INSTRUCTOR NAME BY ID
     private String getInstructorName(String instructorId) {
         for (User u : accountManager.getAllUsers()) {
@@ -66,8 +65,7 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
         return "Unknown";
     }
 // -----------------------------------------------------------
-    
-    
+
     // Auto-generated GUI code
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -155,10 +153,10 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // 1. Create the Student Dashboard screen again
         StudentDashboardFrame dashboard = new StudentDashboardFrame(accountManager, currentUser);
-        
+
         // 2. Make it visible
         dashboard.setVisible(true);
-        
+
         // 3. Close the current "Browse Courses" window
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
@@ -177,13 +175,13 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
         // 3. CHECK FOR DUPLICATES (The Fix)
         if (currentUser instanceof Student) {
             Student student = (Student) currentUser;
-            
+
             // Check if the list of enrolled courses already contains this ID
             if (student.getEnrolledCourses().contains(courseId)) {
-                JOptionPane.showMessageDialog(this, 
-                    "You are already enrolled in this course!", 
-                    "Duplicate Enrollment", 
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "You are already enrolled in this course!",
+                        "Duplicate Enrollment",
+                        JOptionPane.WARNING_MESSAGE);
                 return; // Stop here, do not save
             }
         }
@@ -205,12 +203,18 @@ public class BrowseCoursesFrame extends javax.swing.JFrame {
         accountManager.saveAllUsers();
         accountManager.saveAllCourses();
 
-        JOptionPane.showMessageDialog(this, "Enrolled successfully!");
+        boolean courseUpdated = accountManager.updateAndSaveCourse(course);
+
+        if (courseUpdated) {
+            JOptionPane.showMessageDialog(this, "Enrolled successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "System Error: Course data persistence failed.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_enrollButtonActionPerformed
 
-       
-      
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable CourseTable;
