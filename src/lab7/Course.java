@@ -91,4 +91,63 @@ public class Course
         obj.put("students", new JSONArray(students));
         return obj;
     }
+  
+public coursepreformance generatePerformanceStats(List<Student> allStudents) {
+    
+    // 1. Filter the entire student list down to only those enrolled in THIS course.
+    List<Student> enrolledStudents = allStudents.stream()
+        .filter(s -> getStudents().contains(s.getUserId()))
+        .toList();
+    
+    final int totalEnrolledStudents = enrolledStudents.size();
+    List<lessonstats> lessonStatsList = new ArrayList<>();
+
+    // 2. Iterate over each lesson in the course to calculate stats per lesson.
+    for (Lesson1 lesson : lessons) {
+        String lessonId = lesson.getLessonId();
+        lessonstats stats = new lessonstats(lessonId);
+        
+        int completedCount = 0;
+        List<Integer> validHighestScores = new ArrayList<>();
+        
+        // Iterate over enrolled students ONCE per lesson to gather all required data.
+        for (Student student : enrolledStudents) {
+            
+            // Check for lesson completion
+            if (student.isLessonCompleted(courseId, lessonId)) {
+                completedCount++;
+                stats.addCompletedStudent(student.getUserId());
+            }
+
+            // Collect the student's best score for the quiz
+            Result1 result = student.getResultForLesson(lessonId);
+            if (result != null && !result.getAttempts().isEmpty()) {
+                validHighestScores.add(result.getHighestScore());
+            }
+        }
+        
+        // Calculate Completion Rate
+        double completionRate = (totalEnrolledStudents == 0) ? 0.0 : ((double) completedCount / totalEnrolledStudents) * 100;
+        stats.setCompletionRate(completionRate);
+
+        // Calculate Average Quiz Score using streams for simplicity
+        double avgLessonScore = validHighestScores.stream()
+            .mapToInt(Integer::intValue)
+            .average()
+            .orElse(0.0);
+        
+        stats.setAverageQuizScore(avgLessonScore);
+        
+        lessonStatsList.add(stats);
+    }
+
+    // 3. Calculate Final Course Average Score from the lesson statistics we just computed.
+    double avgCourseScore = lessonStatsList.stream()
+        .mapToDouble(lessonstats::getAverageQuizScore)
+        .average()
+        .orElse(0.0);
+
+    // 4. Return the aggregated insights object.
+    return new coursepreformance(courseId, avgCourseScore, lessonStatsList);
+}
 }
