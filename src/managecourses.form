@@ -27,12 +27,15 @@
               <Component id="jScrollPane1" pref="512" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="create" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
-                  <Component id="edit" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
-                  <Component id="delete" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
-                  <Component id="managelessons" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="logout" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
-                  <Component id="back" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="create" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
+                      <Component id="edit" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
+                      <Component id="delete" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
+                      <Component id="managelessons" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="logout" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
+                      <Component id="back" alignment="1" min="-2" pref="118" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="viewavg" min="-2" pref="118" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -45,7 +48,9 @@
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+              <Component id="viewavg" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="create" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="edit" min="-2" max="-2" attributes="0"/>
@@ -169,6 +174,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="managelessonsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="viewavg">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Insight"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewavgActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

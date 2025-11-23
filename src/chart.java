@@ -7,120 +7,85 @@
  *
  * @author Dell
  */
-import Lab7.Course;
-import javax.swing.JList;
-import javax.swing.DefaultListModel;
-import Lab7.Student;
-import java.util.List;
+import Lab7.AdminManager;
+import Lab7.*;
 import Lab7.StudentManager;
 import Lab7.coursepreformance;
 import Lab7.lessonstats;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent; // Import the necessary event class
-import javax.swing.event.ListSelectionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartFrame;
+
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 public class chart extends javax.swing.JFrame {
-private StudentManager manager = new StudentManager();
-    private List<Student> students;
+
+    InstructorDashboardFrame parent;
+    Course c;
+
     /**
      * Creates new form chart
      */
- 
-    public chart() {
+    public chart(InstructorDashboardFrame parent, Course c, StudentManager sm) {
+
         initComponents();
-        populateStudentList(); 
-        List1.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                // Call the handler method when a selection changes
-                List1ValueChanged(evt);
-            }
-        });
-    }
-private void populateStudentList() {
-    try {
-        // 🚨 CRITICAL FIX: Removed the local declaration of manager and students.
-        // We now assign to the class field 'this.students' using the class field 'this.manager'.
-       this.students = this.manager.getAllStudents(); 
-        
-        DefaultListModel<String> listModel = new DefaultListModel<>();
+        this.parent = parent;
+        this.c = c;
+        List<String> allStudentsIds = c.getStudents();
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        List<Student> allStudents = new ArrayList<>();
+        for (int i = 0; i < allStudentsIds.size(); i++) {
+            Student s = sm.getStudentById(allStudentsIds.get(i));
+            allStudents.add(s);
+        }
+// Loop through all lessons in the map
+        coursepreformance cp = c.generatePerformanceStats(allStudents);
 
-        if (this.students != null) {
-            for (Student student : this.students) {
-                listModel.addElement(student.getUsername() + " (" + student.getUserId() + ")");
-            }
-        }
-        
-        List1.setModel(listModel);
-        
-    } catch (Exception e) {
-        System.err.println("Error loading students: " + e.getMessage());
-    }
-}
-private void List1ValueChanged(javax.swing.event.ListSelectionEvent evt) {
-        if (evt.getValueIsAdjusting()) {
-            return; // Only process the final selection event
-        }
-        
-        int selectedIndex = List1.getSelectedIndex();
-        
-        // Check for a valid selection
-        if (selectedIndex != -1 && students != null && selectedIndex < students.size()) {
-            
-            Student selectedStudent = students.get(selectedIndex);
-            
-            // Analyze and display data for the selected student
-            analyzeStudentPerformance(selectedStudent);
-            
-        } else if (selectedIndex == -1) {
-            // Clear fields if selection is cleared
-            quizaverage.setText("");
-            percent.setText("");
-        }
-    }private void analyzeStudentPerformance(Student student) {
-    List<String> enrolledCourses = student.getEnrolledCourses();
+        for (Map.Entry<String, lessonstats> entry : cp.getLessonStats().entrySet()) {
+            String lessonId = entry.getKey();
+            double avgScore = entry.getValue().getAverageQuizScore();
 
-    if (enrolledCourses.isEmpty()) {
-        quizaverage.setText("N/A (Not Enrolled)");
-        percent.setText("N/A (Not Enrolled)");
-        return;
+            dataset.addValue(avgScore, "Lesson Average Score", lessonId);
+        }
+
+// Create the chart
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Lesson Performance",
+                "Lesson ID", // X axis
+                "Average Quiz Score", // Y axis
+                dataset
+        );
+
+// Display chart in a frame
+        ChartFrame frame = new ChartFrame("Course Performance", barChart);
+        frame.pack();
+        frame.setVisible(true);
+
+//        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+//
+//        dataset.addValue(10, "Courses", "Approved");
+//        dataset.addValue(5, "Courses", "Pending");
+//        dataset.addValue(3, "Courses", "Rejected");
+//
+//        JFreeChart barChart = ChartFactory.createBarChart(
+//                "Course Status Overview", // Chart Title
+//                "Status", // Category Axis Label
+//                "Count", // Value Axis Label
+//                dataset,
+//                org.jfree.chart.plot.PlotOrientation.VERTICAL,
+//                true, true, false
+//        );
+//
+//        ChartPanel chart = new ChartPanel(barChart);
+//        chartPanel.setLayout(new java.awt.BorderLayout());
+//        chartPanel.add(chart, java.awt.BorderLayout.CENTER);
+//        chartPanel.validate();
     }
 
-    // --- Assuming the selected student is enrolled in "978" ---
-    String courseId = enrolledCourses.get(0); 
-    // You need an implemented getCourseById(courseId) method in StudentManager/JsonDatabaseManager 
-    // that loads the Course object (ID 978) from courses.json.
-    Course course = manager.getCourseById(courseId); 
-
-    if (course != null) {
-        List<Student> allStudents = manager.getAllStudents(); 
-        
-        // This method must perform the necessary calculations based on course lessons and student quizResults
-        coursepreformance stats = course.generatePerformanceStats(allStudents); 
-        
-        // --- A. QUIZ AVERAGE PER COURSE ---
-        // This value should be calculated within coursepreformance based on all quiz attempts for the student in that course.
-        double avgScore = stats.getAverageCourseScore(); 
-        quizaverage.setText(String.format("%.2f%%", avgScore)); // Sets the output field
-
-        // --- B. COMPLETION PERCENTAGE PER COURSE ---
-        // Calculates the average of all lesson completion rates (if available)
-        double totalCompletionSum = 0.0;
-        int lessonCount = stats.getLessonStats().size();
-        
-        // **Make sure your lessonstats class is correctly named LessonStats**
-        for (lessonstats lessonStats : stats.getLessonStats().values()) {
-            totalCompletionSum += lessonStats.getCompletionRate();
-        }
-        
-        double avgCompletionRate = (lessonCount > 0) ? (totalCompletionSum / lessonCount) : 0.0;
-        
-        percent.setText(String.format("%.2f%%", avgCompletionRate)); // Sets the output field
-        
-    } else {
-        quizaverage.setText("Course Not Found");
-        percent.setText("Course Not Found");
-    }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -130,98 +95,76 @@ private void List1ValueChanged(javax.swing.event.ListSelectionEvent evt) {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        List1 = new javax.swing.JList<>();
-        jLabel1 = new javax.swing.JLabel();
-        quizaverage = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        percent = new javax.swing.JTextField();
+        chartPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        List1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(List1);
-
-        jLabel1.setText("Quiz averages per lesson.");
-
-        quizaverage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quizaverageActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Completion percentages.");
-
-        percent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                percentActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout chartPanelLayout = new javax.swing.GroupLayout(chartPanel);
+        chartPanel.setLayout(chartPanelLayout);
+        chartPanelLayout.setHorizontalGroup(
+            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 388, Short.MAX_VALUE)
+        );
+        chartPanelLayout.setVerticalGroup(
+            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 276, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(quizaverage, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(percent)))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(quizaverage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(percent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void quizaverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quizaverageActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_quizaverageActionPerformed
-
-    private void percentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_percentActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_percentActionPerformed
-
     /**
      * @param args the command line arguments
      */
-
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(chart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(chart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(chart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(chart.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new chart().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList<String> List1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField percent;
-    private javax.swing.JTextField quizaverage;
+    private javax.swing.JPanel chartPanel;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,14 @@ public class InstructorManager {
         jsonDB = new JsonDatabaseManager();       // initialize JSON manager
         courses = jsonDB.loadCourses();           // load existing courses from courses.json
     }
-
+    public Course getCourse(String courseID){
+        for (Course course : courses){
+            if(course.getCourseId().equals(courseID)){
+                return course;
+            }
+        }
+        return null;
+    }
     public boolean setLessonQuiz(Course course, Lesson1 lesson, Quiz1 quiz) {
         if (course == null || lesson == null || quiz == null) {
             return false;
