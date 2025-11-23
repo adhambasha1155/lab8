@@ -31,6 +31,7 @@ public class LoginFrame extends javax.swing.JFrame {
         initComponents();
         this.accountManager = accountManager;
         instructorManager = new InstructorManager();
+        studentManager = new StudentManager();
         adminManager = new AdminManager();
     }
 
