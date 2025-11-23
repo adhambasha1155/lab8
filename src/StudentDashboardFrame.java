@@ -2,52 +2,55 @@
 import Lab7.Student;
 import Lab7.User;
 import Lab7.UserAccountManager;
+import java.awt.Font;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import lab7.Certificate;
 
-
 public class StudentDashboardFrame extends javax.swing.JFrame {
-    
+
     private UserAccountManager accountManager; // reference to manage users
     private User currentUser; // the logged-in student
 
-    
-
-    
     public StudentDashboardFrame(UserAccountManager accountManager, User currentUser) {
         this.accountManager = accountManager;
         this.currentUser = currentUser;
         initComponents();
         welcomeLabel.setText("Welcome, " + currentUser.getUsername());
     }
-private void loadCertificates() {
-    try {
-        ArrayList<Certificate> certs = Certificate.getCertificates((Student) currentUser);
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("student Id");
-        model.addColumn("Certificate ID");
-        model.addColumn("Course ID");
-        model.addColumn("Issue Date");
 
-        for (Certificate cert : certs) {
-            model.addRow(new Object[]{
-                cert.getStudentID(),
-                cert.getCertificateID(),
-                cert.getCourseID(),
-                cert.getIssueDate().toString()
-            });
+    private void loadCertificates() {
+        try {
+            ArrayList<Certificate> certs = Certificate.getCertificates((Student) currentUser);
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("Certificate ID");
+            model.addColumn("Course ID");
+            model.addColumn("Issue Date");
+            model.addColumn("student Id");
+
+            for (Certificate cert : certs) {
+                model.addRow(new Object[]{
+                    cert.getCertificateID(),
+                    cert.getCourseID(),
+                    cert.getIssueDate().toString(),
+                    cert.getStudentID(),
+                });
+            }
+
+            certificateTable.setModel(model);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error loading certificates: " + e.getMessage());
         }
-
-        certificateTable.setModel(model);
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error loading certificates: " + e.getMessage());
     }
-}
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -228,11 +231,11 @@ private void loadCertificates() {
     }//GEN-LAST:event_enrolledCoursesActionPerformed
 
     private void viewLessonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLessonsActionPerformed
-       // Instead of opening lessons directly, open the list of courses
-    // so the user can SELECT which course to view.
-    EnrolledCoursesFrame enrolledFrame = new EnrolledCoursesFrame(accountManager, currentUser);
-    enrolledFrame.setVisible(true);
-    this.dispose(); // Close the dashboard
+        // Instead of opening lessons directly, open the list of courses
+        // so the user can SELECT which course to view.
+        EnrolledCoursesFrame enrolledFrame = new EnrolledCoursesFrame(accountManager, currentUser);
+        enrolledFrame.setVisible(true);
+        this.dispose(); // Close the dashboard
     }//GEN-LAST:event_viewLessonsActionPerformed
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
@@ -241,7 +244,36 @@ private void loadCertificates() {
     }//GEN-LAST:event_logoutActionPerformed
 
     private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadButtonActionPerformed
-        // TODO add your handling code here:
+
+    int selectedRow = certificateTable.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a certificate.");
+        return;
+    }
+
+    String certId = certificateTable.getValueAt(selectedRow, 0).toString();
+    String courseId = certificateTable.getValueAt(selectedRow, 1).toString();
+    String issueDate = certificateTable.getValueAt(selectedRow, 2).toString();
+
+    String content = " Certificate of Completion \n\n" +
+                     "Certificate ID: " + certId + "\n" +
+                     "Course ID: " + courseId + "\n" +
+                     "Student ID: " + currentUser.getUserId() + "\n" +
+                     "Issue Date: " + issueDate;
+
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setSelectedFile(new File("Certificate_" + certId + ".txt"));
+    int option = fileChooser.showSaveDialog(this);
+
+    if (option == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(content);
+            JOptionPane.showMessageDialog(this, "Certificate saved successfully.");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error saving certificate: " + ex.getMessage());
+        }
+    }
     }//GEN-LAST:event_downloadButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -249,11 +281,30 @@ private void loadCertificates() {
     }//GEN-LAST:event_formWindowOpened
 
     private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
-        
+        int selectedRow = certificateTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a certificate.");
+            return;
+        }
+
+        String certId = certificateTable.getValueAt(selectedRow, 0).toString();
+        String courseId = certificateTable.getValueAt(selectedRow, 1).toString();
+        String issueDate = certificateTable.getValueAt(selectedRow, 2).toString();
+
+        String content = " Certificate of Completion \n\n"
+                + "Certificate ID: " + certId + "\n"
+                + "Course ID: " + courseId + "\n"
+                + "Student ID: " + currentUser.getUserId() + "\n"
+                + "Issue Date: " + issueDate;
+
+        JTextArea textArea = new JTextArea(content);
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        JOptionPane.showMessageDialog(this, scrollPane, "View Certificate", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_viewButtonActionPerformed
-    
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseCoursesButton;
