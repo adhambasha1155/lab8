@@ -170,7 +170,7 @@ public class StudentManager {
     }
 
     // ===================== Helper: Get Course by ID =====================
-    private Course getCourseById(String courseId) {
+    public Course getCourseById(String courseId) {
         for (Course c : courses) {
             if (c.getCourseId().equals(courseId)) return c;
         }
@@ -184,4 +184,8 @@ public class StudentManager {
         }
         return null;
     }
+    public List<Student> getAllStudents() {
+    return students;
+}
+
 }
