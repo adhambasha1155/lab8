@@ -68,7 +68,7 @@ public class Student extends User {
         return progress.contains(entry);
     }
 
-    // Get completed lessons for a specific courses
+  
     public List<String> getCompletedLessons(String courseId) {
         List<String> lessons = new ArrayList<>();
         for (String entry : progress) {
@@ -102,4 +102,28 @@ public class Student extends User {
 
         return obj;
     }
+    public Result1 addQuizResultEntry(String lessonId, int maxRetries) {
+    Result1 existingResult = getResultForLesson(lessonId);
+    if (existingResult == null) {
+        Result1 newResult = new Result1(getUserId(), lessonId, maxRetries);
+        this.quizResults.add(newResult);
+        return newResult;
+    }
+    return existingResult;
+}
+    public boolean addAttemptToResult(String lessonId, int score) {
+    Result1 result = getResultForLesson(lessonId);
+    
+    if (result == null) {
+        System.err.println("Error: Quiz Result entry not found for lesson " + lessonId);
+        return false;
+    }
+
+    if (!result.hasReachedMaxRetries()) {
+        result.loadAttempt(score);
+        return true;
+    } else {
+        System.out.println("Max retries reached for lesson " + lessonId);
+        return false;
+    }}
 }
