@@ -186,6 +186,16 @@ public class SignupFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Invalid email format!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (role.equalsIgnoreCase("Admin")) {
+        // Prompt the user for the special Admin password
+        String adminPassword = JOptionPane.showInputDialog(this, "Enter the special Admin password:", "Admin Verification", JOptionPane.QUESTION_MESSAGE);
+        
+        // Check if the input is null (user pressed Cancel) or the password is wrong
+        if (adminPassword == null || !adminPassword.equals("zaytoun")) {
+            JOptionPane.showMessageDialog(this, "Incorrect password for admins.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; // Stop signup process if admin password is wrong
+        }
+    }
 
         // 5. Signup
         User newUser = accountManager.signup(username, email, password, role);
