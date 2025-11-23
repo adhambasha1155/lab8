@@ -134,7 +134,7 @@ public class JsonDatabaseManager {
                         }
                     }
 
-                    // ✨ NEW: Load quiz results for the student
+                    //  NEW: Load quiz results for the student
                     JSONArray resultsArr = obj.optJSONArray("quizResults");
                     if (resultsArr != null) {
                         for (int j = 0; j < resultsArr.length(); j++) {

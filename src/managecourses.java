@@ -11,32 +11,42 @@ import Lab7.InstructorManager;
 import Lab7.Course; // Assuming Course class is in Lab7 package
 import Lab7.Instructor;
 import Lab7.Lesson1;
+import Lab7.Student;
 import Lab7.StudentManager;
 import Lab7.UserAccountManager; // Needed if you want to perform a full logout
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 public class managecourses extends javax.swing.JFrame {
+
     private Instructor currentInstructor;
     private InstructorManager instructorManager;
     private UserAccountManager accountManager;
     private StudentManager studentManager;
-  private DefaultTableModel tableModel;
-    public managecourses(Instructor instructor, InstructorManager manager, UserAccountManager accountManager,StudentManager studentManager ) {
+    private DefaultTableModel tableModel;
+    private InstructorDashboardFrame insFrame;
+
+    public managecourses(Instructor instructor, InstructorManager manager, UserAccountManager accountManager, StudentManager studentManager, InstructorDashboardFrame insFrame) {
         initComponents();
         this.currentInstructor = instructor;
         this.instructorManager = manager;
         this.accountManager = accountManager;
         this.studentManager = studentManager;
-       this.setLocationRelativeTo(null);
+        this.insFrame = insFrame;
+        this.setLocationRelativeTo(null);
         setTitle("Manage Courses - Welcome, " + currentInstructor.getUsername());
         loadCoursesTable();
-        
+
     }
-   public void loadCoursesTable() {
+    Course course;
+
+    public void loadCoursesTable() {
         String[] columnNames = {"ID", "Title", "Description", "Lessons", "Students", "Status"};
-             
+
         tableModel = new DefaultTableModel(columnNames, 0) {
             // Override to make cells non-editable
             @Override
@@ -44,37 +54,42 @@ public class managecourses extends javax.swing.JFrame {
                 return false;
             }
         };
-        
+
         // Get the list of course IDs created by the instructor
         List<String> courseIds = currentInstructor.getCreatedCourses();
-        
+
         for (String courseId : courseIds) {
             // Fetch the full Course object using the Manager
-            Course course = instructorManager.getCourseById(courseId);
-            
+            course = instructorManager.getCourseById(courseId);
+            /*DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            for (int i = 0; i <= allcourses.size(); i++) {
+                Course c = sm.getCourseById(allcourses.get(i));
+                allcourses.add(course);
+            }*/
             if (course != null) {
                 // Truncate description for a cleaner table view
                 String desc = course.getDescription();
                 String truncatedDesc = desc.length() > 60 ? desc.substring(0, 57) + "..." : desc;
                 String statusString = course.getStatus().name();
-                
+
                 // 3. Prepare the row data (now 6 elements)
-                Object[] rowData = new Object[] {
+                Object[] rowData = new Object[]{
                     course.getCourseId(),
                     course.getTitle(),
                     truncatedDesc,
-                    course.getLessons().size(), 
-                    course.getStudents().size(), 
-                    statusString 
+                    course.getLessons().size(),
+                    course.getStudents().size(),
+                    statusString
                 };
-                
+
                 tableModel.addRow(rowData);
             }
         }
-        
+
         // Apply the prepared model to the JTable
         jtable1.setModel(tableModel);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -92,6 +107,7 @@ public class managecourses extends javax.swing.JFrame {
         delete = new javax.swing.JToggleButton();
         back = new javax.swing.JToggleButton();
         managelessons = new javax.swing.JToggleButton();
+        viewavg = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -150,6 +166,13 @@ public class managecourses extends javax.swing.JFrame {
             }
         });
 
+        viewavg.setText("Insight");
+        viewavg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewavgActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,12 +181,14 @@ public class managecourses extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(create, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(edit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(managelessons, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(back, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(create, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(edit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(delete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(managelessons, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(back, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(viewavg, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -172,7 +197,9 @@ public class managecourses extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(7, 7, 7)
+                .addComponent(viewavg)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(create)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(edit)
@@ -191,17 +218,17 @@ public class managecourses extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
-      // 1. Hide the current frame (managecourses)
-    this.setVisible(false);
-    
-    // 2. Create and show the new creation frame, passing 'this' (the managecourses frame)
-    createFrame createCourseFrame = new createFrame(
-        this.currentInstructor,
-        this.instructorManager,
-        this.accountManager,
-        this // <--- Pass reference to this frame
-    );
-    createCourseFrame.setVisible(true);
+        // 1. Hide the current frame (managecourses)
+        this.setVisible(false);
+
+        // 2. Create and show the new creation frame, passing 'this' (the managecourses frame)
+        createFrame createCourseFrame = new createFrame(
+                this.currentInstructor,
+                this.instructorManager,
+                this.accountManager,
+                this // <--- Pass reference to this frame
+        );
+        createCourseFrame.setVisible(true);
     }//GEN-LAST:event_createActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -211,25 +238,29 @@ public class managecourses extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a course to edit.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         String courseId = (String) jtable1.getModel().getValueAt(selectedRow, 0);
         Course courseToEdit = instructorManager.getCourseById(courseId);
 
         if (courseToEdit != null) {
             String newTitle = JOptionPane.showInputDialog(this, "Enter new Title:", courseToEdit.getTitle());
-            
-            if (newTitle == null || newTitle.trim().isEmpty()) return; 
+
+            if (newTitle == null || newTitle.trim().isEmpty()) {
+                return;
+            }
 
             String newDescription = JOptionPane.showInputDialog(this, "Enter new Description:", courseToEdit.getDescription());
-            
-            if (newDescription == null || newDescription.trim().isEmpty()) return; 
+
+            if (newDescription == null || newDescription.trim().isEmpty()) {
+                return;
+            }
 
             // editCourse handles saving to courses.json
             boolean success = instructorManager.editCourse(courseToEdit, newTitle.trim(), newDescription.trim());
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Course updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadCoursesTable(); 
+                loadCoursesTable();
             } else {
                 JOptionPane.showMessageDialog(this, "Course update failed.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -238,39 +269,39 @@ public class managecourses extends javax.swing.JFrame {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         // TODO add your handling code here:
-      int selectedRow = jtable1.getSelectedRow();
+        int selectedRow = jtable1.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Please select a course to delete.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         String courseId = (String) jtable1.getModel().getValueAt(selectedRow, 0);
         String courseTitle = (String) jtable1.getModel().getValueAt(selectedRow, 1);
-        
-        // Retrieve the Course object needed for the manager method call
-        Course courseToDelete = instructorManager.getCourseById(courseId); 
 
-        int response = JOptionPane.showConfirmDialog(this, 
-            "Are you sure you want to delete the course: " + courseTitle + "?\nThis is a permanent action.", 
-            "Confirm Deletion", 
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.WARNING_MESSAGE);
+        // Retrieve the Course object needed for the manager method call
+        Course courseToDelete = instructorManager.getCourseById(courseId);
+
+        int response = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete the course: " + courseTitle + "?\nThis is a permanent action.",
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
 
         if (response == JOptionPane.YES_OPTION && courseToDelete != null) {
-            
+
             // 1. Call Manager: Manager deletes course from main list, removes ID from instructor, and saves courses.json.
-            boolean removedFromCourses = instructorManager.deleteCourse(currentInstructor, courseToDelete); 
-            
+            boolean removedFromCourses = instructorManager.deleteCourse(currentInstructor, courseToDelete);
+
             if (removedFromCourses) {
                 // 2. Save the updated Instructor object to users.json (since the manager modified currentInstructor)
-                accountManager.saveUser(currentInstructor); 
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Course '" + courseTitle + "' deleted successfully. Changes saved to JSON.", 
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
-                
+                accountManager.saveUser(currentInstructor);
+
+                JOptionPane.showMessageDialog(this,
+                        "Course '" + courseTitle + "' deleted successfully. Changes saved to JSON.",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+
                 loadCoursesTable(); // Refresh the table display
-                
+
             } else {
                 JOptionPane.showMessageDialog(this, "Course deletion failed. The course may not exist.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -280,17 +311,17 @@ public class managecourses extends javax.swing.JFrame {
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
         accountManager.logout();
-        
+
         // 2. Display confirmation message
-        JOptionPane.showMessageDialog(this, 
-            "You have been successfully logged out.", 
-            "Logout Successful", 
-            JOptionPane.INFORMATION_MESSAGE
+        JOptionPane.showMessageDialog(this,
+                "You have been successfully logged out.",
+                "Logout Successful",
+                JOptionPane.INFORMATION_MESSAGE
         );
-        
+
         // 3. Close the current dashboard frame
-        this.dispose(); 
-        
+        this.dispose();
+
         // 4. Open the Login Frame again to restart the session
         // NOTE: You must have a class named LoginFrame available in your project.
         try {
@@ -304,29 +335,29 @@ public class managecourses extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
-   this.dispose();
+        this.dispose();
 
-    // 2. Open the Instructor Dashboard, passing the necessary managers and the current user
-    try {
-        // NOTE: InstructorDashboardFrame must be correctly imported and accept these parameters.
-        InstructorDashboardFrame dashboard = new InstructorDashboardFrame(
-            this.currentInstructor,
-            this.accountManager,
-            this.instructorManager,
-            this.studentManager
-        );
-        dashboard.setVisible(true);
-    } catch (Exception e) {
-        // This catch block runs if the InstructorDashboardFrame class is missing 
-        // or if its constructor signature is incorrect.
-        JOptionPane.showMessageDialog(
-            this,
-            "Could not open the Instructor Dashboard. Check class definition.",
-            "Navigation Error",
-            JOptionPane.ERROR_MESSAGE
-        );
-        System.err.println("Error opening Dashboard: " + e.getMessage());
-    }
+        // 2. Open the Instructor Dashboard, passing the necessary managers and the current user
+        try {
+            // NOTE: InstructorDashboardFrame must be correctly imported and accept these parameters.
+            InstructorDashboardFrame dashboard = new InstructorDashboardFrame(
+                    this.currentInstructor,
+                    this.accountManager,
+                    this.instructorManager,
+                    this.studentManager
+            );
+            dashboard.setVisible(true);
+        } catch (Exception e) {
+            // This catch block runs if the InstructorDashboardFrame class is missing 
+            // or if its constructor signature is incorrect.
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Could not open the Instructor Dashboard. Check class definition.",
+                    "Navigation Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            System.err.println("Error opening Dashboard: " + e.getMessage());
+        }
     }//GEN-LAST:event_backActionPerformed
 
     private void managelessonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managelessonsActionPerformed
@@ -336,7 +367,7 @@ public class managecourses extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a course to manage lessons.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         // 1. Get the selected Course
         String courseId = (String) jtable1.getModel().getValueAt(selectedRow, 0);
         Course courseToEdit = instructorManager.getCourseById(courseId);
@@ -344,10 +375,10 @@ public class managecourses extends javax.swing.JFrame {
         if (courseToEdit != null) {
             // 2. Open the new ManageLessonsFrame
             ManageLessonsFrame manageLessonsFrame = new ManageLessonsFrame(
-                courseToEdit, 
-                this.instructorManager,
-                this, 
-                this.accountManager 
+                    courseToEdit,
+                    this.instructorManager,
+                    this,
+                    this.accountManager
             );
             manageLessonsFrame.setVisible(true);
         } else {
@@ -355,10 +386,23 @@ public class managecourses extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_managelessonsActionPerformed
 
+    private void viewavgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewavgActionPerformed
+        int selectedRow = jtable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a course.");
+            return;
+        }
+        String courseId = jtable1.getValueAt(selectedRow, 0).toString();
+        Course course1 = instructorManager.getCourse(courseId);
+        if (course == null) {
+            JOptionPane.showMessageDialog(this, "NULL COURSE");
+        }
+        chart c = new chart(insFrame, course1, studentManager);
+    }//GEN-LAST:event_viewavgActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton back;
@@ -369,5 +413,6 @@ public class managecourses extends javax.swing.JFrame {
     private javax.swing.JTable jtable1;
     private javax.swing.JToggleButton logout;
     private javax.swing.JToggleButton managelessons;
+    private javax.swing.JButton viewavg;
     // End of variables declaration//GEN-END:variables
 }

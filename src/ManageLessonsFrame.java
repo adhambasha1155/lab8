@@ -282,9 +282,8 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutActionPerformed
 
     private void createQuizButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createQuizButtonActionPerformed
-                                   
-    // TODO add your handling code here:
-    int selectedRow = lessonsTable.getSelectedRow();
+        // TODO add your handling code here:
+        int selectedRow = lessonsTable.getSelectedRow();
     
     // 1. Check for selected lesson
     if (selectedRow == -1) {
@@ -295,7 +294,7 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     // Retrieve the selected Lesson1 object
     // Assuming lesson ID is in column 0
     String lessonId = (String) lessonsTable.getModel().getValueAt(selectedRow, 0);
-    Lesson1 selectedLesson = course.getLessonById(lessonId);  // Ensure course has this method
+    Lesson1 selectedLesson = course.getLessonById(lessonId); 
     
     if (selectedLesson == null) {
         JOptionPane.showMessageDialog(this, "Selected lesson not found.", "Internal Error", JOptionPane.ERROR_MESSAGE);
@@ -326,8 +325,8 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         if (scoreStr == null) return; // User cancelled
         passingScore = Integer.parseInt(scoreStr.trim());
         if (passingScore < 0 || passingScore > 100) {
-            JOptionPane.showMessageDialog(this, "Passing score must be between 0 and 100.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            return;
+             JOptionPane.showMessageDialog(this, "Passing score must be between 0 and 100.", "Input Error", JOptionPane.ERROR_MESSAGE);
+             return;
         }
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Invalid score entered. Please enter a whole number.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -340,8 +339,8 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
         if (numStr == null) return; // User cancelled
         numQuestions = Integer.parseInt(numStr.trim());
         if (numQuestions <= 0) {
-            JOptionPane.showMessageDialog(this, "Number of questions must be greater than zero.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            return;
+             JOptionPane.showMessageDialog(this, "Number of questions must be greater than zero.", "Input Error", JOptionPane.ERROR_MESSAGE);
+             return;
         }
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Invalid number entered. Please enter a whole number.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -353,13 +352,10 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     // 3. Loop to gather all questions
     for (int i = 1; i <= numQuestions; i++) {
         String questionText = JOptionPane.showInputDialog(this, "Question " + i + ": Enter the question text:", "Question Details", JOptionPane.QUESTION_MESSAGE);
-        
-        // --- ADDED CHECK: Question cannot be empty ---
         if (questionText == null || questionText.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Question " + i + " text cannot be empty. Quiz creation aborted.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Question " + i + " creation cancelled. Quiz creation aborted.", "Cancelled", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        // ---------------------------------------------
 
         List<String> options = new ArrayList<>();
         // Gather 4 choices/options
@@ -368,13 +364,10 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
                 "Question " + i + ": Enter Choice " + j + ":", 
                 "Question Details", 
                 JOptionPane.QUESTION_MESSAGE);
-            
-            // --- ADDED CHECK: Option cannot be empty ---
-            if (option == null || option.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Choice " + j + " for Question " + i + " cannot be empty. Quiz creation aborted.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            if (option == null) {
+                JOptionPane.showMessageDialog(this, "Option entry cancelled. Quiz creation aborted.", "Cancelled", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            // --------------------------------------------
             options.add(option);
         }
 
@@ -390,8 +383,8 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
             }
             int choiceNumber = Integer.parseInt(correctStr.trim());
             if (choiceNumber < 1 || choiceNumber > 4) {
-                JOptionPane.showMessageDialog(this, "Correct choice must be 1, 2, 3, or 4.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return;
+                 JOptionPane.showMessageDialog(this, "Correct choice must be 1, 2, 3, or 4.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                 return;
             }
             correctIndex = choiceNumber - 1; 
         } catch (NumberFormatException e) {
@@ -405,7 +398,6 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     }
     
     // 4. Create Quiz1 object
-    // Assuming UUID is imported (java.util.UUID)
     String quizId = UUID.randomUUID().toString();
     Quiz1 newQuiz = new Quiz1(quizId, quizTitle, passingScore);
     for(Question1 q : questions) {
@@ -420,7 +412,6 @@ public class ManageLessonsFrame extends javax.swing.JFrame {
     } else {
         JOptionPane.showMessageDialog(this, "Failed to save the quiz. Please check backend logic.", "Error", JOptionPane.ERROR_MESSAGE);
     }
-
     }//GEN-LAST:event_createQuizButtonActionPerformed
 
     /**
