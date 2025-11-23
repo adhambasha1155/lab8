@@ -28,6 +28,7 @@ private void loadCertificates() {
     try {
         ArrayList<Certificate> certs = Certificate.getCertificates((Student) currentUser);
         DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("student Id");
         model.addColumn("Certificate ID");
         model.addColumn("Course ID");
         model.addColumn("Issue Date");
@@ -64,6 +65,11 @@ private void loadCertificates() {
         welcomeLabel.setText("Welcome, Student");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         enrolledCoursesButton.setText("My Enrolled Courses");
         enrolledCoursesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -108,7 +114,7 @@ private void loadCertificates() {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "", "", "", ""
             }
         ));
         certificateTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -220,6 +226,10 @@ private void loadCertificates() {
     private void downloadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_downloadButtonActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        loadCertificates();
+    }//GEN-LAST:event_formWindowOpened
     
     
     
