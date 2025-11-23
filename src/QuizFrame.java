@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import Lab7.Course;
 import Lab7.Lesson1;
 import Lab7.Question1;
 import Lab7.Quiz1;
@@ -13,20 +14,26 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import Lab7.StudentManager;
+import java.io.IOException;
+import lab7.Certificate;
+
 public class QuizFrame extends javax.swing.JFrame {
 
-   private Quiz1 quiz;
-    private  Student student;
-    private  Lesson1 lesson;
-    private  UserAccountManager accountManager;
-    private  String courseId;
+    private Quiz1 quiz;
+    private Student student;
+    private Lesson1 lesson;
+    private UserAccountManager accountManager;
+    private String courseId;
 
     // --- Quiz State Fields ---
     private int currentQuestionIndex = 0;
     private List<Integer> studentAnswers;
+
     public QuizFrame() {
         initComponents();
     }
+
     public QuizFrame(UserAccountManager accountManager, Student student, String courseId, Lesson1 lesson) {
         this.accountManager = accountManager;
         this.student = student;
@@ -38,7 +45,7 @@ public class QuizFrame extends javax.swing.JFrame {
         initComponents(); // Initialize your GUI components
         this.setLocationRelativeTo(null);
         setTitle("Quiz: " + quiz.getTitle() + " (" + (currentQuestionIndex + 1) + " of " + quiz.getQuestions().size() + ")");
-        
+
         // Group the radio buttons
         ButtonGroup group = new ButtonGroup();
         group.add(rbOption1);
@@ -48,6 +55,7 @@ public class QuizFrame extends javax.swing.JFrame {
 
         displayQuestion(currentQuestionIndex);
     }
+
     private void displayQuestion(int index) {
         if (index >= quiz.getQuestions().size()) {
             finishQuiz();
@@ -65,7 +73,7 @@ public class QuizFrame extends javax.swing.JFrame {
 
         // 2. Clear selection
         rbOption1.setSelected(true); // Default select the first option
-        
+
         // 3. Update Radio Buttons
         rbOption1.setText(options.size() > 0 ? options.get(0) : "N/A");
         rbOption2.setText(options.size() > 1 ? options.get(1) : "N/A");
@@ -81,12 +89,21 @@ public class QuizFrame extends javax.swing.JFrame {
     }
 
     private int getSelectedAnswerIndex() {
-        if (rbOption1.isSelected()) return 0;
-        if (rbOption2.isSelected()) return 1;
-        if (rbOption3.isSelected()) return 2;
-        if (rbOption4.isSelected()) return 3;
+        if (rbOption1.isSelected()) {
+            return 0;
+        }
+        if (rbOption2.isSelected()) {
+            return 1;
+        }
+        if (rbOption3.isSelected()) {
+            return 2;
+        }
+        if (rbOption4.isSelected()) {
+            return 3;
+        }
         return -1; // No selection, though a default selection prevents this
     }
+
     private void finishQuiz() {
         // 1. Calculate Score (Assuming Quiz1 has a calculateScore method)
         int finalScore = quiz.calculateScore(studentAnswers);
@@ -97,16 +114,29 @@ public class QuizFrame extends javax.swing.JFrame {
         Result1 result = student.getResultForLesson(lesson.getLessonId());
         if (result == null) {
             // Assuming max retries is 1 for now, adjust as needed
-            result = new Result1(student.getUserId(), lesson.getLessonId(), 3); 
+            result = new Result1(student.getUserId(), lesson.getLessonId(), 3);
             student.getQuizResults().add(result);
         }
 
         // Add the new attempt
         result.addAttempt(finalScore);
-        
+
         // 3. Save the Student data
         accountManager.saveUser(student);
-        
+        // 3. Check if course is now complete and generate certificate
+        try {
+            Course course = accountManager.getCourseById(courseId);
+            Certificate cert = Certificate.generateCertificate(student, course);
+            if (cert != null) {
+                System.out.println("Certificate generated: " + cert.getCertificateID());
+                JOptionPane.showMessageDialog(null, "Congratulations! You've completed the course and earned a certificate.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error generating certificate: " + e.getMessage());
+        }
+
         // 4. Show Feedback
         String message;
         if (finalScore >= passingScore) {
@@ -117,7 +147,7 @@ public class QuizFrame extends javax.swing.JFrame {
                     + "The passing score was " + passingScore + ".\n"
                     + "You have " + (result.getMaxRetries() - result.getAttempts().size()) + " retries remaining.";
         }
-        
+
         JOptionPane.showMessageDialog(this, message, "Quiz Completed", JOptionPane.INFORMATION_MESSAGE);
 
         // 5. Close QuizFrame and refresh the LessonsFrame (or return to it)
@@ -252,7 +282,7 @@ public class QuizFrame extends javax.swing.JFrame {
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         // TODO add your handling code here:
         studentAnswers.add(getSelectedAnswerIndex());
-        
+
         // 2. Move to the next question
         currentQuestionIndex++;
         displayQuestion(currentQuestionIndex);
