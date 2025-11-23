@@ -35,6 +35,7 @@ private void loadCertificates() {
 
         for (Certificate cert : certs) {
             model.addRow(new Object[]{
+                cert.getStudentID(),
                 cert.getCertificateID(),
                 cert.getCourseID(),
                 cert.getIssueDate().toString()
