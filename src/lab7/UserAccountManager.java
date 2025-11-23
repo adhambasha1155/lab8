@@ -9,15 +9,18 @@ import java.security.NoSuchAlgorithmException;
 public class UserAccountManager {
 
     private List<User> users;       // store all users (Students + Instructors)
+    private List<Course> courses;
     private User currentUser;       // currently logged-in user
     private JsonDatabaseManager jsonDB;
 
 
     public UserAccountManager() {
         users = new ArrayList<>();
+        courses = new ArrayList<>();
         currentUser = null;
         jsonDB = new JsonDatabaseManager();
         users = jsonDB.loadUsers(); // load existing users from users.json
+        courses = jsonDB.loadCourses();
     }
 
     // ===================== SIGNUP =====================
@@ -172,7 +175,26 @@ public class UserAccountManager {
     public void saveAllCourses(List<Course> courses) {
         jsonDB.saveCourses(courses);
     }
-
+    public void reloadCourses() {
+    // This method should contain the logic to re-read the courses.json file 
+    // and replace the current in-memory list of courses with the newly loaded data.
+    
+     courses = jsonDB.loadCourses(); 
+}
+    public boolean updateAndSaveCourse(Course updatedCourse) {
+    // 1. Find the index of the old course object
+    for (int i = 0; i < this.courses.size(); i++) {
+        if (this.courses.get(i).getCourseId().equals(updatedCourse.getCourseId())) {
+            // 2. Replace the old object in the in-memory list with the newly updated one
+            this.courses.set(i, updatedCourse);
+            
+            // 3. Save the entire updated list to the file (courses.json)
+            jsonDB.saveCourses(this.courses);
+            return true;
+        }
+    }
+    return false; // Course not found
+}
    
     //----------------------------------------------------------
 

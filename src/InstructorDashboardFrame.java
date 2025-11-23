@@ -199,10 +199,12 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         try {
             LoginFrame loginFrame = new LoginFrame(accountManager);
             loginFrame.setVisible(true);
+            this.dispose(); 
         } catch (Exception e) {
             // Fallback if LoginFrame creation fails (e.g., if it's not imported or defined)
             System.err.println("Could not reopen LoginFrame: " + e.getMessage());
         }
+         
     
     }//GEN-LAST:event_logoutActionPerformed
 

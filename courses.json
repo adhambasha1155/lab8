@@ -67,63 +67,108 @@
   },
   {
     "description": "electronics course",
-    "students": [],
+    "students": ["U6"],
     "title": "electronics",
     "courseId": "978",
     "instructorId": "U3",
     "status": "APPROVED",
-    "lessons": [{
-      "quiz": {
-        "quizId": "7d882187-0900-404e-a914-aff8db17f43a",
-        "questions": [
-          {
-            "options": [
-              "current",
-              "b",
-              "c",
-              "d"
-            ],
-            "correctIndex": 0,
-            "questionText": "define electricity"
-          },
-          {
-            "options": [
-              "araf",
-              "b",
-              "c",
-              "d"
-            ],
-            "correctIndex": 0,
-            "questionText": "define prog"
-          },
-          {
-            "options": [
-              "zeina",
-              "adham",
-              "eman",
-              "mo"
-            ],
-            "correctIndex": 1,
-            "questionText": "meen"
-          },
-          {
-            "options": [
-              "zeina",
-              "adham",
-              "eman",
-              "mo"
-            ],
-            "correctIndex": 1,
-            "questionText": "who"
-          }
-        ],
-        "title": "quiz 1 "
+    "lessons": [
+      {
+        "quiz": {
+          "quizId": "7d882187-0900-404e-a914-aff8db17f43a",
+          "questions": [
+            {
+              "options": [
+                "current",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 0,
+              "questionText": "define electricity"
+            },
+            {
+              "options": [
+                "araf",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 0,
+              "questionText": "define prog"
+            },
+            {
+              "options": [
+                "zeina",
+                "adham",
+                "eman",
+                "mo"
+              ],
+              "correctIndex": 1,
+              "questionText": "meen"
+            },
+            {
+              "options": [
+                "zeina",
+                "adham",
+                "eman",
+                "mo"
+              ],
+              "correctIndex": 1,
+              "questionText": "who"
+            }
+          ],
+          "title": "quiz 1 "
+        },
+        "lessonId": "L1",
+        "resources": [],
+        "passingScore": 50,
+        "title": "elec intro",
+        "content": "dfg"
       },
-      "lessonId": "L1",
-      "resources": [],
-      "passingScore": 50,
-      "title": "elec intro",
-      "content": "dfg"
-    }]
+      {
+        "quiz": {
+          "quizId": "771e9695-6624-434d-9a84-a970f0c3fe4f",
+          "questions": [
+            {
+              "options": [
+                "v/r",
+                "v/i",
+                "vi",
+                "vf"
+              ],
+              "correctIndex": 0,
+              "questionText": "current law"
+            },
+            {
+              "options": [
+                "a",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 1,
+              "questionText": "resistance"
+            },
+            {
+              "options": [
+                "v",
+                "j",
+                "ohm",
+                "k"
+              ],
+              "correctIndex": 0,
+              "questionText": "voltage sign"
+            }
+          ],
+          "title": "l2 quiz"
+        },
+        "lessonId": "L2",
+        "resources": [],
+        "passingScore": 50,
+        "title": "elec 1",
+        "content": "current"
+      }
+    ]
   }
 ]

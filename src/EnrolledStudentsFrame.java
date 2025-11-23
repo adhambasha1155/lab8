@@ -25,6 +25,7 @@ public class EnrolledStudentsFrame extends javax.swing.JFrame {
         this.instructorManager = im;
         this.studentManager = sm;
         this.accountManager = am;
+        this.accountManager.reloadCourses();
         this.setLocationRelativeTo(null);
         setTitle("Enrolled Students for " + currentInstructor.getUsername() + "'s Courses");
         loadEnrolledStudentsTable();
