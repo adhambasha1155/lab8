@@ -66,204 +66,154 @@
     }]
   },
   {
-    "description": "electronics course",
+    "description": "oop",
     "students": [
-      "U6",
-      "U8"
+      "U9",
+      "U10"
     ],
-    "title": "electronics",
-    "courseId": "978",
+    "title": "Prog II",
+    "courseId": "C4",
     "instructorId": "U3",
     "status": "APPROVED",
     "lessons": [
       {
         "quiz": {
-          "quizId": "7d882187-0900-404e-a914-aff8db17f43a",
+          "quizId": "d0a3b8e6-ecd4-4e22-a65e-b3fa4f0a0859",
           "questions": [
             {
               "options": [
-                "current",
+                "object oriented programming",
                 "b",
                 "c",
                 "d"
               ],
               "correctIndex": 0,
-              "questionText": "define electricity"
+              "questionText": "whats oop?"
             },
             {
               "options": [
-                "araf",
+                "inheritance",
                 "b",
                 "c",
                 "d"
               ],
               "correctIndex": 0,
-              "questionText": "define prog"
+              "questionText": "whats one oop concept"
             },
             {
               "options": [
-                "zeina",
-                "adham",
-                "eman",
-                "mo"
+                "polymorphysim",
+                "b",
+                "c",
+                "d"
               ],
-              "correctIndex": 1,
-              "questionText": "meen"
+              "correctIndex": 0,
+              "questionText": "mention another one"
             },
             {
               "options": [
-                "zeina",
-                "adham",
-                "eman",
-                "mo"
+                "yes",
+                "b",
+                "c",
+                "d"
               ],
-              "correctIndex": 1,
-              "questionText": "who"
+              "correctIndex": 0,
+              "questionText": "is it important?"
             }
           ],
-          "title": "quiz 1 "
+          "title": "quiz 1"
         },
         "lessonId": "L1",
         "resources": [],
         "passingScore": 50,
-        "title": "elec intro",
-        "content": "dfg"
+        "title": "oop definition",
+        "content": "definition"
       },
       {
         "quiz": {
-          "quizId": "771e9695-6624-434d-9a84-a970f0c3fe4f",
+          "quizId": "3e6d5429-7f0b-4e9f-a1b0-4ab31b602747",
           "questions": [
             {
               "options": [
-                "v/r",
-                "v/i",
-                "vi",
-                "vf"
-              ],
-              "correctIndex": 0,
-              "questionText": "current law"
-            },
-            {
-              "options": [
-                "a",
+                "event that disrupts the program",
                 "b",
                 "c",
                 "d"
               ],
-              "correctIndex": 1,
-              "questionText": "resistance"
+              "correctIndex": 0,
+              "questionText": "whats the meaning of exception"
             },
             {
               "options": [
-                "v",
-                "j",
-                "ohm",
-                "k"
+                "runtime exception",
+                "b",
+                "c",
+                "d"
               ],
               "correctIndex": 0,
-              "questionText": "voltage sign"
+              "questionText": "one type of exception"
+            },
+            {
+              "options": [
+                "IOEexception",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 0,
+              "questionText": "another one"
             }
           ],
-          "title": "l2 quiz"
+          "title": "quiz 2"
         },
         "lessonId": "L2",
         "resources": [],
         "passingScore": 50,
-        "title": "elec 1",
-        "content": "current"
-      }
-    ]
-  },
-  {
-    "description": "maths course",
-    "students": [],
-    "title": "Differential",
-    "courseId": "C5",
-    "instructorId": "U3",
-    "status": "APPROVED",
-    "lessons": [{
-      "quiz": {
-        "quizId": "98fe3042-e6d6-41ee-828e-2122bbda577d",
-        "questions": [
-          {
-            "options": [
-              "correct",
-              "",
-              "b",
-              "d"
-            ],
-            "correctIndex": 0,
-            "questionText": "types of integeration"
-          },
-          {
-            "options": [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            "correctIndex": 0,
-            "questionText": "define"
-          }
-        ],
-        "title": "quiz 1"
-      },
-      "lessonId": "L1",
-      "resources": [],
-      "passingScore": 50,
-      "title": "integration",
-      "content": "types"
-    }]
-  },
-  {
-    "description": "testing",
-    "students": [],
-    "title": "test",
-    "courseId": "C7",
-    "instructorId": "U3",
-    "status": "APPROVED",
-    "lessons": [
-      {
-        "quiz": {
-          "quizId": "7d3c6776-0be8-43fb-b795-fcd9a1ba019c",
-          "questions": [{
-            "options": [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            "correctIndex": 0,
-            "questionText": "define"
-          }],
-          "title": "quiz1"
-        },
-        "lessonId": "L1",
-        "resources": [],
-        "passingScore": 50,
-        "title": "lesson1",
-        "content": "test1"
+        "title": "exception",
+        "content": "exception types"
       },
       {
         "quiz": {
-          "quizId": "89952b83-f419-4d51-ad24-d3db90e2128d",
-          "questions": [{
-            "options": [
-              "a",
-              "b",
-              "c",
-              "d"
-            ],
-            "correctIndex": 0,
-            "questionText": "define"
-          }],
-          "title": "quiz2"
+          "quizId": "898d4ac7-3ee4-4cf8-ad3d-a60d95b45a45",
+          "questions": [
+            {
+              "options": [
+                "System.out.println(\"Hello'');",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 0,
+              "questionText": "print hello"
+            },
+            {
+              "options": [
+                "System.out.println(\"Hi\");",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 0,
+              "questionText": "print hi"
+            },
+            {
+              "options": [
+                "end of line",
+                "b",
+                "c",
+                "d"
+              ],
+              "correctIndex": 0,
+              "questionText": "when do we use the ;"
+            }
+          ],
+          "title": "quiz lab1"
         },
-        "lessonId": "L2",
+        "lessonId": "lab",
         "resources": [],
         "passingScore": 50,
-        "title": "lesson2",
-        "content": "test2"
+        "title": "lab 1",
+        "content": "syntax"
       }
     ]
   }

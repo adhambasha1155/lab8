@@ -25,11 +25,13 @@ public class Chart1 extends javax.swing.JFrame {
     private StudentManager manager;
     private List<Student> students;
     private Course selectedCourse;
+    private managecourses parentFrame;
 
-    public Chart1(Course course, StudentManager studentManager) {
+    public Chart1(Course course, StudentManager studentManager, managecourses parentFrame) {
         initComponents();
         this.selectedCourse = course;
         this.manager = studentManager;
+        this.parentFrame = parentFrame;
 
         setTitle("Course Performance Insights: " + course.getTitle());
 
@@ -165,6 +167,7 @@ public class Chart1 extends javax.swing.JFrame {
         quizaverage = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         percent = new javax.swing.JTextField();
+        back = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -191,6 +194,13 @@ public class Chart1 extends javax.swing.JFrame {
             }
         });
 
+        back.setText("back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,6 +219,10 @@ public class Chart1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(percent)))
                 .addContainerGap(82, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +240,9 @@ public class Chart1 extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(percent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(148, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addComponent(back)
+                .addGap(87, 87, 87))
         );
 
         pack();
@@ -240,12 +256,24 @@ public class Chart1 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_percentActionPerformed
 
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        if (parentFrame != null) {
+            parentFrame.setVisible(true); // Show the managecourses frame
+            this.dispose(); // Close the current Chart1 frame
+        } else {
+            // Fallback error, though this shouldn't happen if the calling code is updated.
+            JOptionPane.showMessageDialog(this, "Parent window reference missing.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_backActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> List1;
+    private javax.swing.JToggleButton back;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

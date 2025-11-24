@@ -439,7 +439,7 @@ public class managecourses extends javax.swing.JFrame {
 
         // 2. Open the Chart1 frame, passing the selected course and the student manager
         // Assuming 'chart' is the Chart1 class
-        Chart1 chartFrame = new Chart1(course1, studentManager);
+        Chart1 chartFrame = new Chart1(course1, studentManager, this);
         chartFrame.setVisible(true);
     }//GEN-LAST:event_viewanalyticsActionPerformed
 
