@@ -23,11 +23,7 @@
   },
   {
     "role": "Instructor",
-    "createdCourses": [
-      "978",
-      "C5",
-      "C7"
-    ],
+    "createdCourses": ["C4"],
     "userId": "U3",
     "email": "a@a",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
@@ -35,11 +31,22 @@
   },
   {
     "role": "Student",
-    "certificates": [],
-    "enrolledCourses": ["978"],
+    "certificates": [{
+      "studentId": "U4",
+      "certificateId": "6da50769-466a-4079-9b55-dd6e3172bceb",
+      "issueDate": "2025-11-24",
+      "courseId": "C4"
+    }],
+    "enrolledCourses": [
+      "978",
+      "C4"
+    ],
     "progress": [
       "978:L2",
-      "978:L1"
+      "978:L1",
+      "C4:L1",
+      "C4:L2",
+      "C4:lab"
     ],
     "quizResults": [
       {
@@ -48,6 +55,7 @@
         "lessonId": "L1",
         "attempts": [
           {"score": 75},
+          {"score": 75},
           {"score": 75}
         ]
       },
@@ -55,7 +63,16 @@
         "studentId": "U4",
         "maxRetries": 3,
         "lessonId": "L2",
-        "attempts": [{"score": 66}]
+        "attempts": [
+          {"score": 66},
+          {"score": 66}
+        ]
+      },
+      {
+        "studentId": "U4",
+        "maxRetries": 3,
+        "lessonId": "lab",
+        "attempts": [{"score": 99}]
       }
     ],
     "userId": "U4",
@@ -91,12 +108,7 @@
   },
   {
     "role": "Student",
-    "certificates": [{
-      "studentId": "U8",
-      "certificateId": "c4af9fa9-d817-4bf0-807a-170fc9310723",
-      "issueDate": "2025-11-23",
-      "courseId": "C7"
-    }],
+    "certificates": [],
     "enrolledCourses": [
       "C5",
       "978",
@@ -128,5 +140,101 @@
     "email": "adham@231",
     "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
     "username": "adhambasha"
+  },
+  {
+    "role": "Student",
+    "certificates": [{
+      "studentId": "U9",
+      "certificateId": "9d79da33-60c0-4727-b237-9d3c7ed90940",
+      "issueDate": "2025-11-24",
+      "courseId": "C4"
+    }],
+    "enrolledCourses": ["C4"],
+    "progress": [
+      "C4:L1",
+      "C4:L2",
+      "C4:lab"
+    ],
+    "quizResults": [
+      {
+        "studentId": "U9",
+        "maxRetries": 3,
+        "lessonId": "L1",
+        "attempts": [{"score": 100}]
+      },
+      {
+        "studentId": "U9",
+        "maxRetries": 3,
+        "lessonId": "L2",
+        "attempts": [{"score": 66}]
+      },
+      {
+        "studentId": "U9",
+        "maxRetries": 3,
+        "lessonId": "lab",
+        "attempts": [{"score": 66}]
+      }
+    ],
+    "userId": "U9",
+    "email": "s2@s2",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "student2"
+  },
+  {
+    "role": "Student",
+    "certificates": [{
+      "studentId": "U10",
+      "certificateId": "e050e3a8-0a6e-4fbd-90f5-475bda90f43a",
+      "issueDate": "2025-11-24",
+      "courseId": "C4"
+    }],
+    "enrolledCourses": ["C4"],
+    "progress": [
+      "C4:L1",
+      "C4:L2",
+      "C4:lab"
+    ],
+    "quizResults": [
+      {
+        "studentId": "U10",
+        "maxRetries": 3,
+        "lessonId": "L1",
+        "attempts": [{"score": 50}]
+      },
+      {
+        "studentId": "U10",
+        "maxRetries": 3,
+        "lessonId": "L2",
+        "attempts": [{"score": 99}]
+      },
+      {
+        "studentId": "U10",
+        "maxRetries": 3,
+        "lessonId": "lab",
+        "attempts": [{"score": 99}]
+      }
+    ],
+    "userId": "U10",
+    "email": "s3@s3",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "student3"
+  },
+  {
+    "role": "Student",
+    "certificates": [],
+    "enrolledCourses": [],
+    "progress": [],
+    "quizResults": [],
+    "userId": "U11",
+    "email": "s4@s4",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "student4"
+  },
+  {
+    "role": "Admin",
+    "userId": "U12",
+    "email": "ad1@ad1",
+    "passwordHash": "752ffed29aeff2f28781bb2f34d437ecd734ddbb5a0811209c610f3098feb7bd",
+    "username": "admin1"
   }
 ]

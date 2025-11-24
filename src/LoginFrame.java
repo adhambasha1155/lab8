@@ -48,6 +48,7 @@ public class LoginFrame extends javax.swing.JFrame {
         signupButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         loginTypeComboBox = new javax.swing.JComboBox<>();
+        exit = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,6 +86,13 @@ public class LoginFrame extends javax.swing.JFrame {
 
         loginTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Email", "Username" }));
 
+        exit.setText("exit");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,17 +104,22 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addComponent(signupButton)
                 .addGap(77, 77, 77))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(emailField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                        .addComponent(passwordLabel)
-                        .addComponent(passwordField)
-                        .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(loginTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(emailField, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                                .addComponent(passwordLabel)
+                                .addComponent(passwordField)
+                                .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(loginTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -127,7 +140,9 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginButton)
                     .addComponent(signupButton))
-                .addGap(0, 52, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exit)
+                .addGap(0, 16, Short.MAX_VALUE))
         );
 
         pack();
@@ -237,13 +252,14 @@ public class LoginFrame extends javax.swing.JFrame {
     private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupButtonActionPerformed
         // Open SignupFrame and pass the account manager
         SignupFrame signupFrame = new SignupFrame(accountManager);
-
-        // Close LoginFrame
         this.dispose();
-
-        // Show SignupFrame
         signupFrame.setVisible(true);
     }//GEN-LAST:event_signupButtonActionPerformed
+
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,6 +299,7 @@ public class LoginFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField emailField;
     private javax.swing.JLabel emailLabel;
+    private javax.swing.JToggleButton exit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginButton;
     private javax.swing.JComboBox<String> loginTypeComboBox;
