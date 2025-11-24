@@ -8,6 +8,7 @@
  * @author Dell
  */
 import Lab7.Course;
+import Lab7.Lesson1;
 import javax.swing.JList;
 import javax.swing.DefaultListModel;
 import Lab7.Student;
@@ -18,109 +19,137 @@ import Lab7.lessonstats;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent; // Import the necessary event class
 import javax.swing.event.ListSelectionListener;
+
 public class Chart1 extends javax.swing.JFrame {
-private StudentManager manager = new StudentManager();
+
+    private StudentManager manager;
     private List<Student> students;
-    /**
-     * Creates new form chart
-     */
- 
-    public Chart1() {
+    private Course selectedCourse;
+
+    public Chart1(Course course, StudentManager studentManager) {
         initComponents();
-        populateStudentList(); 
+        this.selectedCourse = course;
+        this.manager = studentManager;
+
+        setTitle("Course Performance Insights: " + course.getTitle());
+
+        populateStudentList();
+
+        // Display the overall course average immediately upon loading (THE FIX)
+        displayOverallCourseStats();
+
         List1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                // Call the handler method when a selection changes
                 List1ValueChanged(evt);
             }
         });
     }
-private void populateStudentList() {
-    try {
-        // 🚨 CRITICAL FIX: Removed the local declaration of manager and students.
-        // We now assign to the class field 'this.students' using the class field 'this.manager'.
-       this.students = this.manager.getAllStudents(); 
-        
-        DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        if (this.students != null) {
-            for (Student student : this.students) {
-                listModel.addElement(student.getUsername() + " (" + student.getUserId() + ")");
-            }
-        }
-        
-        List1.setModel(listModel);
-        
-    } catch (Exception e) {
-        System.err.println("Error loading students: " + e.getMessage());
+    private void displayOverallCourseStats() {
+        // Get all students (or just the enrolled ones) for accurate performance calculation
+        List<Student> allStudents = this.manager.getAllStudents();
+
+        // Generate stats for the specific course using all students
+        // ASSUMPTION: course.generatePerformanceStats handles filtering for enrollment.
+        coursepreformance stats = selectedCourse.generatePerformanceStats(allStudents);
+
+        // This is the overall course average quiz score (aggregated across all students)
+        double overallCourseAvgScore = stats.getAverageCourseScore();
+
+        // Set the overall course average into the 'quizaverage' field
+        quizaverage.setText(String.format("%.2f%%", overallCourseAvgScore));
+
+        // Clear the student-specific field
+        percent.setText("");
     }
-}
-private void List1ValueChanged(javax.swing.event.ListSelectionEvent evt) {
+
+    private void populateStudentList() {
+        try {
+            // Fetch all students (assuming we need all of them to check enrollment later)
+            this.students = this.manager.getAllStudents();
+
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+
+            if (this.students != null) {
+                for (Student student : this.students) {
+                    // Only add students enrolled in the current course to the list
+                    if (student.getEnrolledCourses().contains(selectedCourse.getCourseId())) {
+                         listModel.addElement(student.getUsername() + " (" + student.getUserId() + ")");
+                    }
+                }
+            }
+
+            List1.setModel(listModel);
+
+        } catch (Exception e) {
+            System.err.println("Error loading students: " + e.getMessage());
+        }
+    }
+
+    private void List1ValueChanged(javax.swing.event.ListSelectionEvent evt) {
         if (evt.getValueIsAdjusting()) {
             return; // Only process the final selection event
         }
-        
+
         int selectedIndex = List1.getSelectedIndex();
         
-        // Check for a valid selection
-        if (selectedIndex != -1 && students != null && selectedIndex < students.size()) {
+        // Find the selected student by matching the username/ID string in the list
+        if (selectedIndex != -1) {
+            // Get the display string, e.g., "student1 (1001)"
+            String selectedItemText = List1.getModel().getElementAt(selectedIndex);
+            // Extract the user ID from the string (assuming ID is in parentheses)
+            String userId = selectedItemText.substring(
+                selectedItemText.lastIndexOf("(") + 1, 
+                selectedItemText.lastIndexOf(")")
+            );
             
-            Student selectedStudent = students.get(selectedIndex);
+            // Find the actual Student object
+            Student selectedStudent = this.manager.getStudentById(userId); // Assuming StudentManager has this method
             
-            // Analyze and display data for the selected student
-            analyzeStudentPerformance(selectedStudent);
-            
+            if (selectedStudent != null) {
+                // Correct: Call the method that updates the student-specific field (percent)
+                displayStudentCompletion(selectedStudent); 
+            } else {
+                 percent.setText("Error");
+            }
+
         } else if (selectedIndex == -1) {
-            // Clear fields if selection is cleared
-            quizaverage.setText("");
-            percent.setText("");
+            // Correct: When deselected, only clear the student-specific field (percent).
+            // The quizaverage field should retain the overall course average.
+            percent.setText(""); 
+            // Optional: Re-display the overall average just in case, though it shouldn't be needed
+            // displayOverallCourseStats(); 
         }
-    }private void analyzeStudentPerformance(Student student) {
-    List<String> enrolledCourses = student.getEnrolledCourses();
-
-    if (enrolledCourses.isEmpty()) {
-        quizaverage.setText("N/A (Not Enrolled)");
-        percent.setText("N/A (Not Enrolled)");
-        return;
     }
 
-    // --- Assuming the selected student is enrolled in "978" ---
-    String courseId = enrolledCourses.get(0); 
-    // You need an implemented getCourseById(courseId) method in StudentManager/JsonDatabaseManager 
-    // that loads the Course object (ID 978) from courses.json.
-    Course course = manager.getCourseById(courseId); 
+    // This method correctly calculates the student's completion rate for the selected course
+    private void displayStudentCompletion(Student student) {
 
-    if (course != null) {
-        List<Student> allStudents = manager.getAllStudents(); 
+        // The quizaverage field is deliberately left alone to display the Overall Course Average.
         
-        // This method must perform the necessary calculations based on course lessons and student quizResults
-        coursepreformance stats = course.generatePerformanceStats(allStudents); 
-        
-        // --- A. QUIZ AVERAGE PER COURSE ---
-        // This value should be calculated within coursepreformance based on all quiz attempts for the student in that course.
-        double avgScore = stats.getAverageCourseScore(); 
-        quizaverage.setText(String.format("%.2f%%", avgScore)); // Sets the output field
+        // --- B. COMPLETION PERCENTAGE PER COURSE (Student Specific) ---
+        List<Lesson1> lessons = selectedCourse.getLessons();
+        int completedLessons = 0;
+        int totalLessonsWithQuizzes = 0;
 
-        // --- B. COMPLETION PERCENTAGE PER COURSE ---
-        // Calculates the average of all lesson completion rates (if available)
-        double totalCompletionSum = 0.0;
-        int lessonCount = stats.getLessonStats().size();
-        
-        // **Make sure your lessonstats class is correctly named LessonStats**
-        for (lessonstats lessonStats : stats.getLessonStats().values()) {
-            totalCompletionSum += lessonStats.getCompletionRate();
+        for (Lesson1 lesson : lessons) {
+            if (lesson.getQuiz() != null) {
+                totalLessonsWithQuizzes++;
+                // Use isLessonCompleted which checks for a passing score
+                if (student.isLessonCompleted(selectedCourse.getCourseId(), lesson.getLessonId())) {
+                    completedLessons++;
+                }
+            }
         }
-        
-        double avgCompletionRate = (lessonCount > 0) ? (totalCompletionSum / lessonCount) : 0.0;
-        
-        percent.setText(String.format("%.2f%%", avgCompletionRate)); // Sets the output field
-        
-    } else {
-        quizaverage.setText("Course Not Found");
-        percent.setText("Course Not Found");
+
+        double completionRate = (totalLessonsWithQuizzes > 0)
+                ? ((double) completedLessons / totalLessonsWithQuizzes) * 100
+                : 0.0;
+
+        // Display the student's completion rate in the 'percent' field
+        percent.setText(String.format("%.2f%%", completionRate));
     }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -214,7 +243,6 @@ private void List1ValueChanged(javax.swing.event.ListSelectionEvent evt) {
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> List1;
