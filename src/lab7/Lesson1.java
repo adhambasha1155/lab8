@@ -53,7 +53,10 @@ public class Lesson1 {
         this.passingScore = passingScore;
     }
     public int getPassingScore() {
+            if (quiz != null) {
             return quiz.getPassingScore();
+            }
+        return this.passingScore;
     }
 
     public void addResource(String resource) { resources.add(resource); }

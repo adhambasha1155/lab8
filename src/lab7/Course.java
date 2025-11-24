@@ -12,7 +12,7 @@ public class Course {
     private String description;
     private String instructorId;
     private List<Lesson1> lessons;
-    private List<String> students; // List of enrolled student IDs
+    private List<String> students; // List of the enrolled student IDs
     private ApprovalStatus status;
 
     public Course(String courseId, String title, String description, String instructorId) {
